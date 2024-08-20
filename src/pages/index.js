@@ -5,7 +5,9 @@ export default function Home() {
   return (
     <div className="min-h-screen w-full bg-success-light flex flex-col justify-between">
       <Head>
-        <title>Health-Risk App</title>
+        <title>
+          ระบบประเมินความเสี่ยงทางสุขภาพกลุ่มอาชีพทำครกหิน อ.เมือง จ.ลำปาง
+        </title>
         <meta name="description" content="Health Risk Assessment Application" />
       </Head>
 
