@@ -30,7 +30,7 @@ const MenuData = [
 
 export default function Menu() {
   return (
-    <div className="flex flex-col gap-4 pt-2">
+    <div className="flex flex-col gap-4 pt-2 max-w-[1440px] mx-auto">
       <h2 className="text-2xl font-semibold ml-1">เมนู</h2>
       {MenuData.map((menu, index) => (
         <MenuCard

@@ -10,7 +10,7 @@ export default function RegisterWorker() {
         <meta name="description" content="Register Worker" />
       </Head>
 
-      <main className="w-full h-full p-5">
+      <main className="max-w-[760px] mx-auto h-full p-5">
         <RegisterWorkerForm />
       </main>
     </div>

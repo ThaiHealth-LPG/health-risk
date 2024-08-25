@@ -12,7 +12,7 @@ export default function MenuCard({ title, desc, icon, color, link }) {
     >
       <div className="flex justify-between items-center p-3 gap-3">
         <div
-          className={`flex justify-center items-center min-w-14 min-h-14 bg-gradient-to-tl from-${color} to-${color}-light rounded-2xl`}
+          className={`flex justify-center items-center min-w-14 min-h-14 bg-gradient-to-tl from-accent to-accent-light rounded-xl`}
         >
           <IconMenu className="text-bases text-2xl" />
         </div>
