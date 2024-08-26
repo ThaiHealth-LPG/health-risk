@@ -1,41 +1,36 @@
+import Menu from "@/components/home/Menu";
 import Head from "next/head";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen w-full bg-success-light flex flex-col justify-between">
       <Head>
-        <title>Health-Risk App</title>
+        <title>
+          ระบบประเมินความเสี่ยงทางสุขภาพกลุ่มอาชีพทำครกหิน อ.เมือง จ.ลำปาง
+        </title>
         <meta name="description" content="Health Risk Assessment Application" />
       </Head>
 
-      <header className="bg-primary text-white py-6">
-        <div className="container mx-auto">
-          <h1 className="text-4xl font-bold text-center">
-            Welcome to Health-Risk App
-          </h1>
+      <div className="max-w-[760px] w-full mx-auto flex flex-col justify-start text-bases-content p-5 gap-3">
+        <div>
+          <h1 className="text-2xl">ยินดีต้อนรับ!</h1>
+          <h2 className="text-xl">เข้าสู่ระบบประเมินความเสี่ยงทางสุขภาพ</h2>
+          <h2 className="text-xl">กลุ่มอาชีพทำครกหิน อ.เมือง จ.ลำปาง</h2>
         </div>
-      </header>
 
-      <main className="container mx-auto py-12">
-        <section className="bg-white shadow-md rounded p-8">
-          <h2 className="text-2xl font-semibold text-secondary mb-4">
-            Get Started
+        <div>
+          <h2 className="text-xs">
+            จัดทำโดย คณะสาธารณสุขศาสตร์ มหาวิทยาลัยธรรมศาสตร์
           </h2>
-          <p className="text-gray-700 mb-6">
-            Use this app to assess health risks quickly and efficiently. Follow
-            the steps below to begin.
-          </p>
-          <button className="bg-accent text-white px-4 py-2 rounded hover:bg-yellow-500">
-            Start Assessment
-          </button>
-        </section>
-      </main>
-
-      <footer className="bg-gray-800 text-white py-4">
-        <div className="container mx-auto text-center">
-          &copy; 2024 Health-Risk App. All rights reserved.
+          <h2 className="text-xs">
+            สนับสนุนโดย สำนักงานกองทุนสนับสนุนการสร้างเสริมสุขภาพ (สสส.)
+          </h2>
         </div>
-      </footer>
+      </div>
+
+      <main className="absolute bottom-0 bg-bases-light w-full mx-auto p-5 rounded-t-3xl pb-10">
+        <Menu />
+      </main>
     </div>
   );
 }
