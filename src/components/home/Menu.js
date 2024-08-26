@@ -10,14 +10,14 @@ const MenuData = [
     desc: "การรับสัมผัสเสียงดัง",
     icon: PiGauge,
     color: "accent",
-    link: "/risk-assessment",
+    link: "/assessment/hearingloss",
   },
   {
     title: "ลงทะเบียน",
     desc: "ผู้ประกอบอาชีพทำครกหิน",
     icon: GrUserWorker,
     color: "primary",
-    link: "/register-worker",
+    link: "/register/worker",
   },
   {
     title: "ข่าวสาร",
