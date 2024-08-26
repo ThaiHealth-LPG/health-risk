@@ -4,9 +4,12 @@ import { Formik, Form } from "formik";
 import AssessHearingLossTab from "./AssessHearingLossTab";
 import { useHearingLossRisk } from "@/context/HearingLossRiskContext";
 import RiskGauge from "@/components/gauge/RiskGauge";
+import AssessHaringLossResult from "./AssessHaringLossResult";
+import { MdNavigateBefore } from "react-icons/md";
+import Link from "next/link";
 
 export default function AssessHearingLossForm() {
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(1);
   const [submissionError, setSubmissionError] = useState("");
   const {
     hearingLossRiskLevel,
@@ -64,17 +67,39 @@ export default function AssessHearingLossForm() {
               </TabPanel>
 
               <TabPanel>
-                <Button
-                  type="button"
-                  onClick={() => {
-                    resetForm();
-                    resetTab();
-                  }}
-                  isDisabled={isSubmitting}
-                  className="w-full mt-4"
-                >
-                  ประเมินอีกครั้ง
-                </Button>
+                <AssessHaringLossResult riskLevel={hearingLossRiskLevel} />
+                <div className="flex gap-4 items-center mt-5">
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      resetForm();
+                      resetTab();
+                      resetHearingLossRisk();
+                    }}
+                    isDisabled={isSubmitting}
+                    className="w-full"
+                  >
+                    <MdNavigateBefore className="text-4xl text-back" />
+                    ประเมินอีกครั้ง
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={submitForm}
+                    colorScheme="orange"
+                    className="w-full"
+                  >
+                    บันทึกผลการประเมิน
+                  </Button>
+                </div>
+                <Link href="/">
+                  <Button
+                    type="button"
+                    colorScheme="green"
+                    className="w-full mt-4"
+                  >
+                    กลับสู่หน้าหลัก
+                  </Button>
+                </Link>
               </TabPanel>
             </TabPanels>
           </Tabs>
