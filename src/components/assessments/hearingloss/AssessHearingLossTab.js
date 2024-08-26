@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { positionOptions } from "../../register/worker/Option";
 import { MdNavigateNext } from "react-icons/md";
 
-export default function AssessHearingLossTab({ onNextTab }) {
+export default function AssessHearingLossTab({ submitForm }) {
   const { values, setFieldValue } = useFormikContext();
 
   useEffect(() => {
@@ -98,7 +98,7 @@ export default function AssessHearingLossTab({ onNextTab }) {
 
       <Button
         type="button"
-        onClick={onNextTab}
+        onClick={submitForm}
         colorScheme="green"
         className="w-full disabled:text-black"
         isDisabled={!isFormValid()}
