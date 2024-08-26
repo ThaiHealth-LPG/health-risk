@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,9 +8,5 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-html,
-body {
-  font-family: 'Kanit', sans-serif;
+  font-family: "Noto Sans Thai", sans-serif;
 }
