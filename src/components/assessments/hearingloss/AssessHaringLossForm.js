@@ -3,19 +3,22 @@ import { Button, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import AssessHearingLossTab from "./AssessHearingLossTab";
 import { useHearingLossRisk } from "@/context/HearingLossRiskContext";
+import RiskGauge from "@/components/gauge/RiskGauge";
 
 export default function AssessHearingLossForm() {
   const [tabIndex, setTabIndex] = useState(0);
   const [submissionError, setSubmissionError] = useState("");
-  const { hearingLossRisk, calculateHearingLossRisk, resetHearingLossRisk } =
-    useHearingLossRisk();
+  const {
+    hearingLossRiskLevel,
+    calculateHearingLossRisk,
+    resetHearingLossRisk,
+  } = useHearingLossRisk();
 
   const handleSubmit = (values, actions) => {
     try {
       calculateHearingLossRisk(values);
-      console.log(`Hearing Loss Risk: ${hearingLossRisk}`);
-      //   actions.resetForm();
-      //   setTabIndex(1);
+      actions.resetForm();
+      setTabIndex(1);
     } catch (error) {
       setSubmissionError("Failed to calculate hearing loss risk.");
       actions.resetForm();
@@ -42,6 +45,7 @@ export default function AssessHearingLossForm() {
     >
       {({ isSubmitting, resetForm, submitForm }) => (
         <Form>
+          <RiskGauge riskLevel={hearingLossRiskLevel} />
           <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)}>
             <TabPanels>
               <TabPanel>
