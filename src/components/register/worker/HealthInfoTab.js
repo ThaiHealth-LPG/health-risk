@@ -49,7 +49,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
   return (
     <Stack spacing={4}>
       <FormControl>
-        <FormLabel>น้ำหนัก</FormLabel>
+        <FormLabel>น้ำหนัก*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
@@ -62,7 +62,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
       </FormControl>
 
       <FormControl>
-        <FormLabel>ส่วนสูง</FormLabel>
+        <FormLabel>ส่วนสูง*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
