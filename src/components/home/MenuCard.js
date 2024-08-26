@@ -2,9 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { MdNavigateNext } from "react-icons/md";
 
-export default function MenuCard({ title, desc, icon, color, link }) {
-  const IconMenu = icon;
-
+export default function MenuCard({ title, desc, icon: IconMenu, link, color }) {
   return (
     <Link
       href={`${link}`}
@@ -12,7 +10,7 @@ export default function MenuCard({ title, desc, icon, color, link }) {
     >
       <div className="flex justify-between items-center p-3 gap-3">
         <div
-          className={`flex justify-center items-center min-w-14 min-h-14 bg-gradient-to-tl from-accent to-accent-light rounded-xl`}
+          className={`flex justify-center items-center min-w-14 min-h-14 rounded-xl ${color}`}
         >
           <IconMenu className="text-bases text-2xl" />
         </div>

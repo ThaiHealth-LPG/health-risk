@@ -9,28 +9,28 @@ const MenuData = [
     title: "ประเมินความเสี่ยง",
     desc: "การรับสัมผัสเสียงดัง",
     icon: PiGauge,
-    color: "accent",
+    color: "bg-accent",
     link: "/assessment/hearingloss",
   },
   {
     title: "ลงทะเบียน",
     desc: "ผู้ประกอบอาชีพทำครกหิน",
     icon: GrUserWorker,
-    color: "primary",
+    color: "bg-primary",
     link: "/register/worker",
   },
   {
-    title: "ข่าวสาร",
+    title: "ข้อมูลข่าวสาร",
     desc: "อาชีวอนามัยและความปลอดภัย",
     icon: TbInfoTriangleFilled,
-    color: "error",
+    color: "bg-error",
     link: "/info",
   },
 ];
 
 export default function Menu() {
   return (
-    <div className="flex flex-col gap-4 pt-2 max-w-[1440px] mx-auto">
+    <div className="flex flex-col gap-4 pt-2 max-w-[760px] mx-auto">
       <h2 className="text-2xl font-semibold ml-1">เมนู</h2>
       {MenuData.map((menu, index) => (
         <MenuCard

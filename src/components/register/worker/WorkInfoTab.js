@@ -88,6 +88,8 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
             type="number"
             name="noise"
             placeholder="ระดับความดันเสียง"
+            min={0}
+            step={1}
           />
           <InputRightAddon>dB(A)</InputRightAddon>
         </InputGroup>
@@ -101,6 +103,9 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
             type="number"
             name="workingHours"
             placeholder="ชั่วโมงการทำงานต่อวัน"
+            min={1}
+            max={24}
+            step={1}
           />
           <InputRightAddon>ชั่วโมง</InputRightAddon>
         </InputGroup>
@@ -114,6 +119,9 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
             type="number"
             name="workingWeeks"
             placeholder="วันทำงานต่อสัปดาห์"
+            min={1}
+            max={7}
+            step={1}
           />
           <InputRightAddon>วัน</InputRightAddon>
         </InputGroup>
@@ -127,17 +135,19 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
             type="number"
             name="workingYears"
             placeholder="ประสบการณ์ทำงาน"
+            min={1}
+            step={1}
           />
           <InputRightAddon>ปี</InputRightAddon>
         </InputGroup>
       </FormControl>
 
       <FormControl>
-        <FormLabel>ที่อยู่สถานที่ทำงาน</FormLabel>
+        <FormLabel>ที่อยู่หรือชื่อสถานที่ทำงาน*</FormLabel>
         <Field
           as={Textarea}
           name="workAddress"
-          placeholder="ที่อยู่สถานที่ทำงาน"
+          placeholder="ที่อยู่หรือชื่อสถานที่ทำงาน"
         />
       </FormControl>
 

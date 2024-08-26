@@ -11,7 +11,7 @@ export default function Home() {
         <meta name="description" content="Health Risk Assessment Application" />
       </Head>
 
-      <div className="max-w-[1440px] w-full mx-auto flex flex-col justify-start text-bases-content p-5 gap-3">
+      <div className="max-w-[760px] w-full mx-auto flex flex-col justify-start text-bases-content p-5 gap-3">
         <div>
           <h1 className="text-2xl">ยินดีต้อนรับ!</h1>
           <h2 className="text-xl">เข้าสู่ระบบประเมินความเสี่ยงทางสุขภาพ</h2>

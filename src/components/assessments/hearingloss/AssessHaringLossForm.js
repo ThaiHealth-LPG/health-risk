@@ -16,6 +16,7 @@ import {
   FormControl,
   FormLabel,
   Stack,
+  Spinner,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import AssessHearingLossTab from "./AssessHearingLossTab";
@@ -25,30 +26,40 @@ import AssessHaringLossResult from "./AssessHaringLossResult";
 import { MdNavigateBefore } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function AssessHearingLossForm() {
   const [tabIndex, setTabIndex] = useState(0);
-  const [submissionError, setSubmissionError] = useState("");
-  const [apiError, setApiError] = useState("");
+  const [nameNotFound, setNameNotFound] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const {
     hearingLossRiskScore,
     hearingLossRiskLevel,
     calculateHearingLossRisk,
     resetHearingLossRisk,
   } = useHearingLossRisk();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleCalculateRisk = (values, actions) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
+  useEffect(() => {
+    resetHearingLossRisk();
+    setLoading(false);
+  }, []);
+
+  const handleCalculateRisk = (values) => {
     try {
       calculateHearingLossRisk(values);
       setTabIndex(1);
     } catch (error) {
-      setSubmissionError("Failed to calculate hearing loss risk.");
-      actions.resetForm();
+      console.log(error);
     }
   };
 
-  const handleSaveData = async (values) => {
+  const handleSaveData = async (values, { resetForm }) => {
+    setLoading(true);
     try {
       const response = await axios.post("/api/hearingloss", {
         position: values.position,
@@ -62,9 +73,25 @@ export default function AssessHearingLossForm() {
         riskLevel: hearingLossRiskLevel,
       });
 
+      if (response.status === 404 || response.data.error) {
+        setNameNotFound(true);
+        setLoading(false);
+        return;
+      }
+
       console.log("Data saved successfully:", response.data);
+      resetForm();
+      resetHearingLossRisk();
+      router.push("/");
     } catch (error) {
-      setApiError("Failed to save data: " + error.message);
+      console.log("Failed to save data. Please try again later.");
+      if (error.response && error.response.status === 404) {
+        setNameNotFound(true);
+      } else {
+        console.error("Error saving risk data:", error.message);
+        setNameNotFound(false);
+      }
+      setLoading(false);
     }
   };
 
@@ -83,7 +110,7 @@ export default function AssessHearingLossForm() {
       }}
       onSubmit={handleCalculateRisk}
     >
-      {({ isSubmitting, resetForm, submitForm, values }) => (
+      {({ resetForm, submitForm, values, setFieldValue }) => (
         <Form>
           <RiskGauge riskLevel={hearingLossRiskLevel} />
           <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)}>
@@ -113,7 +140,6 @@ export default function AssessHearingLossForm() {
                       resetTab();
                       resetHearingLossRisk();
                     }}
-                    isDisabled={isSubmitting}
                     className="w-full"
                   >
                     <MdNavigateBefore className="text-4xl text-back" />
@@ -133,6 +159,11 @@ export default function AssessHearingLossForm() {
                     type="button"
                     colorScheme="green"
                     className="w-full mt-4"
+                    onClick={() => {
+                      resetForm();
+                      resetTab();
+                      resetHearingLossRisk();
+                    }}
                   >
                     กลับสู่หน้าหลัก
                   </Button>
@@ -141,18 +172,17 @@ export default function AssessHearingLossForm() {
             </TabPanels>
           </Tabs>
 
-          {submissionError && (
-            <div style={{ color: "red", marginTop: "10px" }}>
-              {submissionError}
-            </div>
-          )}
-
-          {apiError && (
-            <div style={{ color: "red", marginTop: "10px" }}>{apiError}</div>
-          )}
-
           {/* Modal */}
-          <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <Modal
+            isOpen={isOpen}
+            onClose={() => {
+              setFieldValue("firstName", "");
+              setFieldValue("lastName", "");
+              setNameNotFound(false);
+              onClose();
+            }}
+            isCentered
+          >
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>ข้อมูลผู้ได้รับการประเมิน</ModalHeader>
@@ -177,17 +207,46 @@ export default function AssessHearingLossForm() {
                       placeholder="นามสกุล"
                     />
                   </FormControl>
+                  {nameNotFound && (
+                    <p style={{ color: "red" }}>
+                      ไม่พบชื่อนามสกุลในระบบ
+                      <br />
+                      กรุณาตรวจสอบชื่อนามสกุลอีกครั้ง
+                      <br />
+                      หรือกดลงทะเบียนผู้ประกอบอาชีพทำครกหิน
+                    </p>
+                  )}
                 </Stack>
               </ModalBody>
               <ModalFooter>
+                {nameNotFound && (
+                  <Link href="/register/worker">
+                    <Button colorScheme="blue" mr={3} isLoading={loading}>
+                      ลงทะเบียน
+                    </Button>
+                  </Link>
+                )}
+
                 <Button
-                  colorScheme="blue"
+                  colorScheme="green"
                   mr={3}
-                  onClick={() => handleSaveData(values)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSaveData(values, { resetForm });
+                  }}
+                  isLoading={loading}
                 >
                   บันทึกข้อมูล
                 </Button>
-                <Button variant="ghost" onClick={onClose}>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setFieldValue("firstName", "");
+                    setFieldValue("lastName", "");
+                    setNameNotFound(false);
+                    onClose();
+                  }}
+                >
                   ยกเลิก
                 </Button>
               </ModalFooter>

@@ -56,6 +56,8 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
             type="number"
             name="bodyWeight"
             placeholder="น้ำหนัก"
+            min={10}
+            step={10}
           />
           <InputRightAddon>กิโลกรัม</InputRightAddon>
         </InputGroup>
@@ -69,6 +71,8 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
             type="number"
             name="bodyHeight"
             placeholder="ส่วนสูง"
+            min={10}
+            step={10}
           />
           <InputRightAddon>เซนติเมตร</InputRightAddon>
         </InputGroup>

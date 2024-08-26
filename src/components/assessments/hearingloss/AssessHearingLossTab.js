@@ -56,6 +56,7 @@ export default function AssessHearingLossTab({ submitForm }) {
             type="number"
             name="noise"
             placeholder="ระดับความดันเสียง"
+            min={0}
           />
           <InputRightAddon>dB(A)</InputRightAddon>
         </InputGroup>
@@ -69,6 +70,9 @@ export default function AssessHearingLossTab({ submitForm }) {
             type="number"
             name="workingHours"
             placeholder="ชั่วโมงการทำงานต่อวัน"
+            min={1}
+            max={24}
+            step={1}
           />
           <InputRightAddon>ชั่วโมง</InputRightAddon>
         </InputGroup>
@@ -82,6 +86,8 @@ export default function AssessHearingLossTab({ submitForm }) {
             type="number"
             name="bodyHeight"
             placeholder="ส่วนสูง"
+            min={10}
+            step={10}
           />
           <InputRightAddon>เซนติเมตร</InputRightAddon>
         </InputGroup>

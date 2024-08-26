@@ -125,7 +125,14 @@ export default function PersonalInfoTab({ nextTab }) {
       <FormControl>
         <FormLabel>อายุ*</FormLabel>
         <InputGroup>
-          <Field as={Input} type="number" name="age" placeholder="อายุ" />
+          <Field
+            as={Input}
+            type="number"
+            name="age"
+            placeholder="อายุ"
+            min={1}
+            step={1}
+          />
           <InputRightAddon>ปี</InputRightAddon>
         </InputGroup>
       </FormControl>
@@ -146,7 +153,7 @@ export default function PersonalInfoTab({ nextTab }) {
         <Field
           as={Textarea}
           name="homeAddress"
-          placeholder="ที่อยู่ที่พักอาศัย"
+          placeholder="ที่อยู่หรือบ้านเลขที่ที่พักอาศัย"
         />
       </FormControl>
 
@@ -191,17 +198,19 @@ export default function PersonalInfoTab({ nextTab }) {
             type="number"
             name="stayYears"
             placeholder="ระยะเวลาที่อาศัยอยู่ในพื้นที่"
+            min={1}
+            step={1}
           />
           <InputRightAddon>ปี</InputRightAddon>
         </InputGroup>
       </FormControl>
 
       <FormControl>
-        <FormLabel>ที่อยู่ภูมิลำเนา (ถ้ามี)</FormLabel>
+        <FormLabel>ที่อยู่ภูมิลำเนาเดิม (กรณีย้ายถิ่นฐาน)</FormLabel>
         <Field
           as={Textarea}
           name="bornAddress"
-          placeholder="ที่อยู่ภูมิลำเนา"
+          placeholder="ที่อยู่หรือจังหวัดภูมิลำเนา"
         />
       </FormControl>
 

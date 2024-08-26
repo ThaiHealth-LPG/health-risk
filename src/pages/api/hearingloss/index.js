@@ -25,13 +25,6 @@ export default async function handler(req, res) {
         .eq("last_name", lastName)
         .single();
 
-      if (personalError) {
-        console.error("Personal Error:", personalError.message); // Debugging statement
-        throw new Error(
-          "Could not find personal record: " + personalError.message
-        );
-      }
-
       if (!personalData) {
         return res
           .status(404)
