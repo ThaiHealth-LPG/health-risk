@@ -168,7 +168,7 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.birth && touched.birth}>
-        <FormLabel>วันเดือนปีเกิด</FormLabel>
+        <FormLabel>วันเดือนปีเกิด (ค.ศ.)</FormLabel>
         <Field
           as={Input}
           type="date"
