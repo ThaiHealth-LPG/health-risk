@@ -151,7 +151,7 @@ export default function AssessHearingLossForm() {
                     className="w-full"
                     onClick={onOpen}
                   >
-                    บันทึกผลการประเมิน
+                    บันทึกข้อมูล
                   </Button>
                 </div>
                 <Link href="/">
