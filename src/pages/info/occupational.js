@@ -1,15 +1,15 @@
+import InfoOccupational from "@/components/infoOccupational/InfoOccupational";
 import React from "react";
 import Head from "next/head";
-import { MdNavigateBefore } from "react-icons/md";
 import Link from "next/link";
-import AssessHaringLossForm from "@/components/assessments/hearingloss/AssessHaringLossForm";
+import { MdNavigateBefore } from "react-icons/md";
 
-export default function AssessmentHearingLoss() {
+export default function occupational() {
   return (
     <div className="min-h-screen w-full bg-bases">
       <Head>
-        <title>ประเมินความเสี่ยงการรับสัมผัสเสียงดัง</title>
-        <meta name="description" content="Register Worker" />
+        <title>ข้อมูลข่าวสาร อาชีวอนามัยและความปลอดภัย</title>
+        <meta name="description" content="Info Occupational" />
       </Head>
 
       <nav className="w-full h-12 bg-success-light">
@@ -22,7 +22,7 @@ export default function AssessmentHearingLoss() {
       </nav>
 
       <main className="max-w-[1024px] mx-auto h-full p-5">
-        <AssessHaringLossForm />
+        <InfoOccupational />
       </main>
     </div>
   );

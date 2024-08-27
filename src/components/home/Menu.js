@@ -24,7 +24,7 @@ const MenuData = [
     desc: "อาชีวอนามัยและความปลอดภัย",
     icon: TbInfoTriangleFilled,
     color: "bg-error",
-    link: "/info",
+    link: "/info/occupational",
   },
 ];
 
