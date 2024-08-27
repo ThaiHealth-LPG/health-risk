@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       bodyHeight,
       bmi,
       medical,
-      disease,
+      diseases,
       earSymptoms,
       earSymptomsDetails,
     } = req.body;
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       body_height: bodyHeight,
       bmi,
       medical,
-      disease,
+      diseases,
       ear_symptoms: earSymptoms,
     };
 

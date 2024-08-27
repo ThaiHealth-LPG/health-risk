@@ -83,7 +83,7 @@ export default function RegisterWorkerForm() {
           bodyHeight: values.bodyHeight,
           bmi: values.bmi,
           medical: values.medical,
-          disease: values.disease,
+          diseases: values.diseases,
           earSymptoms: values.earSymptoms,
           earSymptomsDetails: values.earSymptomsDetails,
         }),

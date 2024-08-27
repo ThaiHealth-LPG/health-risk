@@ -21,7 +21,6 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
     useFormikContext();
   const { bodyWeight, bodyHeight, bmi } = values;
   const [disableOtherDiseases, setDisableOtherDiseases] = useState(false);
-  const [disableOtherPPE, setDisableOtherPPE] = useState(false);
   const [earSymptoms, setEarSymptoms] = useState("");
 
   useEffect(() => {
@@ -50,16 +49,16 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
 
   const handleDiseasesChange = (value) => {
     if (value.includes("ไม่มี")) {
-      setFieldValue("disease", ["ไม่มี"]);
+      setFieldValue("diseases", ["ไม่มี"]);
       setDisableOtherDiseases(true);
     } else {
-      setFieldValue("disease", value);
+      setFieldValue("diseases", value);
       setDisableOtherDiseases(false);
     }
   };
 
   const isFormValid = () => {
-    return values.medical && values.disease && values.earSymptoms;
+    return values.medical && values.diseases && values.earSymptoms;
   };
 
   return (
@@ -155,7 +154,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
 
       <FormControl>
         <FormLabel>โรคประจำตัว*</FormLabel>
-        <Field name="disease">
+        <Field name="diseases">
           {({ field }) => (
             <CheckboxGroup
               value={field.value}
