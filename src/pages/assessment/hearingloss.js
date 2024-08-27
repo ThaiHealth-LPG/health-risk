@@ -13,7 +13,7 @@ export default function AssessmentHearingLoss() {
       </Head>
 
       <nav className="w-full h-12 bg-success-light">
-        <div className="max-w-[760px] mx-auto  pt-2 pl-2 ">
+        <div className="max-w-[1024px] mx-auto  pt-2 pl-2 ">
           <Link href="/" className="flex items-center w-fit">
             <MdNavigateBefore className="text-4xl text-neutral" />
             <span>กลับสู่หน้าหลัก</span>
@@ -21,7 +21,7 @@ export default function AssessmentHearingLoss() {
         </div>
       </nav>
 
-      <main className="max-w-[760px] mx-auto h-full p-5">
+      <main className="max-w-[1024px] mx-auto h-full p-5">
         <AssessHaringLossForm />
       </main>
     </div>
