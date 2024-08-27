@@ -57,6 +57,7 @@ export default function AssessHearingLossTab({ submitForm }) {
             name="noise"
             placeholder="ระดับความดันเสียง"
             min={0}
+            step={0.01}
           />
           <InputRightAddon>dB(A)</InputRightAddon>
         </InputGroup>
@@ -86,8 +87,8 @@ export default function AssessHearingLossTab({ submitForm }) {
             type="number"
             name="bodyHeight"
             placeholder="ส่วนสูง"
-            min={10}
-            step={10}
+            min={50}
+            step={1}
           />
           <InputRightAddon>เซนติเมตร</InputRightAddon>
         </InputGroup>

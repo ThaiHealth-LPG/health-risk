@@ -10,6 +10,8 @@ import {
   Select,
   Textarea,
   Button,
+  FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
 import { useEffect } from "react";
@@ -17,7 +19,13 @@ import { nationOptions } from "./Option";
 import { MdLocationOn, MdNavigateNext } from "react-icons/md";
 
 export default function PersonalInfoTab({ nextTab }) {
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue, errors, touched, handleBlur } =
+    useFormikContext();
+  const toast = useToast();
+
+  const today = new Date();
+  today.setDate(today.getDate() - 1);
+  const maxDate = today.toISOString().split("T")[0];
 
   useEffect(() => {
     if (values.birth) {
@@ -41,17 +49,26 @@ export default function PersonalInfoTab({ nextTab }) {
 
   const handleGeolocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setFieldValue("homeLatitude", position.coords.latitude);
-          setFieldValue("homeLongitude", position.coords.longitude);
-        },
-        (error) => {
-          console.error("Error getting location", error);
-        }
-      );
+      navigator.geolocation.getCurrentPosition((position) => {
+        setFieldValue("homeLatitude", position.coords.latitude);
+        setFieldValue("homeLongitude", position.coords.longitude);
+      });
+
+      toast({
+        title: "ปักหมุดที่พักอาศัยสำเร็จ",
+        description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     } else {
-      console.error("Geolocation is not supported by this browser.");
+      toast({
+        title: "ไม่สามารถปักหมุดที่พักอาศัย",
+        description: "กรุณาลองใหม่อีกครั้ง",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -73,14 +90,16 @@ export default function PersonalInfoTab({ nextTab }) {
         <Field
           as={Input}
           name="idNumber"
-          placeholder="เลขประจำตัวประชาชนหรือ Passport"
+          placeholder="เลขประจำตัวประชาชนหรือเลข Passport"
+          onBlur={handleBlur}
         />
+        <FormErrorMessage>{errors.idNumber}</FormErrorMessage>
       </FormControl>
 
-      <FormControl as="fieldset">
+      <FormControl isInvalid={!!errors.gender && touched.gender} as="fieldset">
         <FormLabel as="legend">เพศ*</FormLabel>
-        <RadioGroup name="gender">
-          <Stack direction="row">
+        <RadioGroup name="gender" onBlur={handleBlur}>
+          <Stack direction="row" spacing={4}>
             <Field as={Radio} name="gender" value="male">
               ชาย
             </Field>
@@ -89,63 +108,126 @@ export default function PersonalInfoTab({ nextTab }) {
             </Field>
           </Stack>
         </RadioGroup>
+        <FormErrorMessage>{errors.gender}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.firstName && touched.firstName}>
         <FormLabel>ชื่อ*</FormLabel>
-        <Field as={Input} name="firstName" placeholder="ชื่อ" />
+        <Field
+          as={Input}
+          name="firstName"
+          placeholder="ใส่เฉพาะข้อความ"
+          onBlur={handleBlur}
+          validate={(value) => {
+            let error;
+            if (!value) {
+              error = "กรุณาใส่ข้อมูลชื่อ";
+            }
+            return error;
+          }}
+        />
+        <FormErrorMessage>{errors.firstName}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.lastName && touched.lastName}>
         <FormLabel>นามสกุล*</FormLabel>
-        <Field as={Input} name="lastName" placeholder="นามสกุล" />
+        <Field
+          as={Input}
+          name="lastName"
+          placeholder="ใส่เฉพาะข้อความ"
+          onBlur={handleBlur}
+          validate={(value) => {
+            let error;
+            if (!value) {
+              error = "กรุณาใส่ข้อมูลนามสกุล";
+            }
+            return error;
+          }}
+        />
+        <FormErrorMessage>{errors.lastName}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.phoneNumber && touched.phoneNumber}>
         <FormLabel>หมายเลขโทรศัพท์*</FormLabel>
         <Field
           as={Input}
           type="tel"
           name="phoneNumber"
-          placeholder="หมายเลขโทรศัพท์"
+          placeholder="ใส่เฉพาะตัวเลข เช่น 0801234567"
           pattern="[0-9]{10}"
+          onBlur={handleBlur}
+          validate={(value) => {
+            let error;
+            if (!/^[0-9]{10}$/.test(value)) {
+              error = "กรุณาใส่ข้อมูลหมายเลขโทรศัพท์ 10 หลัก";
+            }
+            return error;
+          }}
         />
+        <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.birth && touched.birth}>
         <FormLabel>วันเดือนปีเกิด</FormLabel>
         <Field
           as={Input}
           type="date"
           name="birth"
-          placeholder="วันเดือนปีเกิด"
+          placeholder="ใส่เฉพาะตัวเลข"
+          max={maxDate}
+          onBlur={handleBlur}
         />
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.age && touched.age}>
         <FormLabel>อายุ*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="age"
-            placeholder="อายุ"
+            placeholder="ใส่เฉพาะตัวเลข"
             min={1}
             step={1}
+            onBlur={handleBlur}
+            validate={(value) => {
+              let error;
+              if (value === 0) {
+                error = "ข้อมูลอายุต้องไม่ต่ำกว่า 1 ปี";
+              } else if (!value) {
+                error = "กรุณาใส่ข้อมูลอายุ";
+              } else if (value < 1) {
+                error = "ข้อมูลอายุต้องไม่ต่ำกว่า 1 ปี";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>ปี</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.age}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.nation && touched.nation}>
         <FormLabel>สัญชาติ*</FormLabel>
-        <Field as={Select} name="nation">
+        <Field
+          as={Select}
+          name="nation"
+          onBlur={handleBlur}
+          validate={(value) => {
+            let error;
+            if (!value) {
+              error = "กรุณาเลือกสัญชาติ";
+            }
+            return error;
+          }}
+        >
           {nationOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </Field>
+        <FormErrorMessage>{errors.nation}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
@@ -153,7 +235,8 @@ export default function PersonalInfoTab({ nextTab }) {
         <Field
           as={Textarea}
           name="homeAddress"
-          placeholder="ที่อยู่หรือบ้านเลขที่ที่พักอาศัย"
+          placeholder="ใส่บ้านเลขที่ หมู่ที่ ตำบล ของที่พักอาศัย"
+          onBlur={handleBlur}
         />
       </FormControl>
 
@@ -168,6 +251,7 @@ export default function PersonalInfoTab({ nextTab }) {
             step="any"
             min="-90"
             max="90"
+            onBlur={handleBlur}
           />
         </FormControl>
 
@@ -181,6 +265,7 @@ export default function PersonalInfoTab({ nextTab }) {
             step="any"
             min="-180"
             max="180"
+            onBlur={handleBlur}
           />
         </FormControl>
       </div>
@@ -190,27 +275,43 @@ export default function PersonalInfoTab({ nextTab }) {
         ปักหมุดที่พักอาศัย
       </Button>
 
-      <FormControl>
-        <FormLabel>ระยะเวลาที่อาศัยอยู่ในพื้นที่</FormLabel>
+      <FormControl isInvalid={!!errors.workingYears && touched.workingYears}>
+        <FormLabel>ระยะเวลาที่อาศัยอยู่ในพื้นที่*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="stayYears"
-            placeholder="ระยะเวลาที่อาศัยอยู่ในพื้นที่"
+            placeholder="ใส่เฉพาะตัวเลข"
             min={1}
             step={1}
+            onBlur={handleBlur}
+            validate={(value) => {
+              let error;
+              if (value === 0) {
+                error =
+                  "ข้อมูลระยะเวลาที่อาศัยอยู่ในพื้นที่ต้องไม่ต่ำกว่า 1 ปี";
+              } else if (!value) {
+                error = "กรุณาใส่ข้อมูลระยะเวลาที่อาศัยอยู่ในพื้นที่";
+              } else if (value < 1) {
+                error =
+                  "ข้อมูลระยะเวลาที่อาศัยอยู่ในพื้นที่ต้องไม่ต่ำกว่า 1 ปี";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>ปี</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.stayYears}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
-        <FormLabel>ที่อยู่ภูมิลำเนาเดิม (กรณีย้ายถิ่นฐาน)</FormLabel>
+      <FormControl isInvalid={!!errors.bornAddress && touched.bornAddress}>
+        <FormLabel>ที่อยู่ภูมิลำเนาเดิม (กรณีมีการย้ายถิ่นฐาน)</FormLabel>
         <Field
           as={Textarea}
           name="bornAddress"
-          placeholder="ที่อยู่หรือจังหวัดภูมิลำเนา"
+          placeholder="ใส่ที่อยู่หรือจังหวัดภูมิลำเนาเดิม"
+          onBlur={handleBlur}
         />
       </FormControl>
 

@@ -10,6 +10,8 @@ import {
   Checkbox,
   Textarea,
   Button,
+  FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
 import { useEffect, useState } from "react";
@@ -17,8 +19,10 @@ import { positionOptions, workOptions } from "./Option";
 import { MdNavigateBefore, MdNavigateNext, MdLocationOn } from "react-icons/md";
 
 export default function WorkInfoTab({ nextTab, prevTab }) {
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue, errors, touched, handleBlur } =
+    useFormikContext();
   const [disableOtherPPE, setDisableOtherPPE] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     const selectedPosition = positionOptions.find(
@@ -31,17 +35,25 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
 
   const handleGeolocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setFieldValue("workLatitude", position.coords.latitude);
-          setFieldValue("workLongitude", position.coords.longitude);
-        },
-        (error) => {
-          console.error("Error getting location", error);
-        }
-      );
+      navigator.geolocation.getCurrentPosition((position) => {
+        setFieldValue("workLatitude", position.coords.latitude);
+        setFieldValue("workLongitude", position.coords.longitude);
+      });
+      toast({
+        title: "ปักหมุดที่ทำงานสำเร็จ",
+        description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     } else {
-      console.error("Geolocation is not supported by this browser.");
+      toast({
+        title: "ไม่สามารถปักหมุดที่ทำงาน",
+        description: "กรุณาลองใหม่อีกครั้ง",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -58,88 +70,150 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
   const isFormValid = () => {
     return (
       values.position &&
-      values.noise &&
-      values.workingHours &&
-      values.workingWeeks &&
-      values.workingYears &&
+      values.noise > 0 &&
+      values.workingHours > 0 &&
+      values.workingWeeks > 0 &&
+      values.workingYears > 0 &&
       values.workSeparation &&
-      values.ppe
+      values.ppe != ""
     );
   };
 
   return (
     <Stack spacing={4}>
-      <FormControl>
+      <FormControl isInvalid={!!errors.position && touched.position}>
         <FormLabel>ตำแหน่งงาน*</FormLabel>
-        <Field as={Select} name="position">
+        <Field
+          as={Select}
+          name="position"
+          onBlur={handleBlur}
+          validate={(value) => {
+            let error;
+            if (!value) {
+              error = "กรุณาเลือกตำแหน่งงาน";
+            }
+            return error;
+          }}
+        >
           {positionOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </Field>
+        <FormErrorMessage>{errors.position}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.noise && touched.noise}>
         <FormLabel>ระดับความดันเสียง*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="noise"
-            placeholder="ระดับความดันเสียง"
+            placeholder="ใส่เฉพาะตัวเลข"
             min={0}
-            step={1}
+            step={0.01}
+            validate={(value) => {
+              let error;
+              if (!value) {
+                error = "กรุณาใส่ข้อมูลระดับความดันเสียง";
+              } else if (value < 0) {
+                error = "ข้อมูลระดับความดันเสียงต้องไม่ต่ำกว่า 0 db(A)";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>dB(A)</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.noise}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.workingHours && touched.workingHours}>
         <FormLabel>ชั่วโมงการทำงานต่อวัน*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="workingHours"
-            placeholder="ชั่วโมงการทำงานต่อวัน"
+            placeholder="ใส่เฉพาะตัวเลข"
             min={1}
             max={24}
             step={1}
+            validate={(value) => {
+              let error;
+              if (value === 0) {
+                error = "ข้อมูลชั่วโมงการทำงานต่อวันต้องไม่ต่ำกว่า 1 ชั่วโมง";
+              } else if (!value) {
+                error = "กรุณาใส่ข้อมูลชั่วโมงการทำงานต่อวัน";
+              } else if (value < 1) {
+                error = "ข้อมูลชั่วโมงการทำงานต่อวันต้องไม่ต่ำกว่า 1 ชั่วโมง";
+              } else if (value > 24) {
+                error = "ข้อมูลชั่วโมงการทำงานต่อวันต้องไม่เกินกว่า 24 ชั่วโมง";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>ชั่วโมง</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.workingHours}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.workingWeeks && touched.workingWeeks}>
         <FormLabel>วันทำงานต่อสัปดาห์*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="workingWeeks"
-            placeholder="วันทำงานต่อสัปดาห์"
+            placeholder="ใส่เฉพาะตัวเลข"
             min={1}
             max={7}
             step={1}
+            validate={(value) => {
+              let error;
+              if (value === 0) {
+                error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่ต่ำกว่า 1 วัน";
+              } else if (!value) {
+                error = "กรุณาใส่ข้อมูลวันทำงานต่อสัปดาห์";
+              } else if (value < 1) {
+                error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่ต่ำกว่า 1 วัน";
+              } else if (value > 7) {
+                error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่เกินกว่า 7 วัน";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>วัน</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.workingYears}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
-        <FormLabel>ประสบการณ์ทำงาน*</FormLabel>
+      <FormControl isInvalid={!!errors.workingYears && touched.workingYears}>
+        <FormLabel>ประสบการณ์ทำครกหิน*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="workingYears"
-            placeholder="ประสบการณ์ทำงาน"
+            placeholder="ใส่เฉพาะตัวเลข (ถ้าไม่ถึงปีให้ใส่ 1 ปี)"
             min={1}
             step={1}
+            validate={(value) => {
+              let error;
+              if (value === 0) {
+                error = "ข้อมูลประสบการณ์ครกหินต้องไม่ต่ำกว่า 1 ปี";
+              } else if (!value) {
+                error = "กรุณาใส่ข้อมูลประสบการณ์ครกหิน";
+              } else if (value < 1) {
+                error = "ข้อมูลประสบการณ์ครกหินต้องไม่ต่ำกว่า 1 ปี";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>ปี</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.workingYears}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
@@ -147,7 +221,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
         <Field
           as={Textarea}
           name="workAddress"
-          placeholder="ที่อยู่หรือชื่อสถานที่ทำงาน"
+          placeholder="ใส่ชื่อ บ้านเลขที่ หมู่ที่ ตำบล ของสถานที่ทำงาน"
         />
       </FormControl>
 
@@ -162,6 +236,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
             step="any"
             min="-90"
             max="90"
+            readOnly
           />
         </FormControl>
 
@@ -175,6 +250,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
             step="any"
             min="-180"
             max="180"
+            readOnly
           />
         </FormControl>
       </div>
@@ -184,15 +260,28 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
         ปักหมุดที่ทำงาน
       </Button>
 
-      <FormControl>
+      <FormControl
+        isInvalid={!!errors.workSeparation && touched.workSeparation}
+      >
         <FormLabel>ลักษณะสถานที่ทำงาน*</FormLabel>
-        <Field as={Select} name="workSeparation">
+        <Field
+          as={Select}
+          name="workSeparation"
+          validate={(value) => {
+            let error;
+            if (!value) {
+              error = "กรุณาเลือกลักษณะสถานที่ทำงาน";
+            }
+            return error;
+          }}
+        >
           {workOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </Field>
+        <FormErrorMessage>{errors.workSeparation}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
