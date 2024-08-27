@@ -8,24 +8,26 @@ export default async function handler(req, res) {
       bodyHeight,
       bmi,
       medical,
-      diseases,
+      disease,
       earSymptoms,
       earSymptomsDetails,
     } = req.body;
 
+    const dataToInsert = {
+      personal_id: personalId,
+      body_weight: bodyWeight,
+      body_height: bodyHeight,
+      bmi,
+      medical,
+      disease,
+      ear_symptoms: earSymptoms,
+    };
+
+    if (earSymptomsDetails)
+      dataToInsert.ear_symptoms_details = earSymptomsDetails;
+
     try {
-      const { error } = await supabase.from("health").insert([
-        {
-          personal_id: personalId,
-          body_weight: bodyWeight,
-          body_height: bodyHeight,
-          bmi: bmi,
-          medical: medical,
-          diseases: diseases,
-          ear_symptoms: earSymptoms,
-          ear_symptoms_details: earSymptomsDetails,
-        },
-      ]);
+      const { error } = await supabase.from("health").insert([dataToInsert]);
 
       if (error) throw error;
 

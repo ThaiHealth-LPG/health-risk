@@ -11,17 +11,18 @@ export default async function handler(req, res) {
       bornAddress,
     } = req.body;
 
+    const dataToInsert = {
+      personal_id: personalId,
+    };
+
+    if (homeAddress) dataToInsert.home_address = homeAddress;
+    if (homeLatitude) dataToInsert.home_latitude = homeLatitude;
+    if (homeLongitude) dataToInsert.home_longitude = homeLongitude;
+    if (stayYears) dataToInsert.stay_years = stayYears;
+    if (bornAddress) dataToInsert.born_address = bornAddress;
+
     try {
-      const { error } = await supabase.from("home").insert([
-        {
-          personal_id: personalId,
-          home_address: homeAddress,
-          home_latitude: homeLatitude,
-          home_longitude: homeLongitude,
-          stay_years: stayYears,
-          born_address: bornAddress,
-        },
-      ]);
+      const { error } = await supabase.from("home").insert([dataToInsert]);
 
       if (error) throw error;
 

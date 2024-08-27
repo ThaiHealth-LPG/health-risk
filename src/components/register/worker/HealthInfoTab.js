@@ -7,15 +7,21 @@ import {
   InputGroup,
   InputRightAddon,
   Button,
+  FormErrorMessage,
+  Checkbox,
+  CheckboxGroup,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
-import { diseaseOptions, medicalOptions } from "./Option";
+import { medicalOptions } from "./Option";
 import { useEffect, useState } from "react";
 import { MdNavigateBefore } from "react-icons/md";
 
 export default function HealthInfoTab({ prevTab, isLoading }) {
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue, errors, touched, handleBlur } =
+    useFormikContext();
   const { bodyWeight, bodyHeight, bmi } = values;
+  const [disableOtherDiseases, setDisableOtherDiseases] = useState(false);
+  const [disableOtherPPE, setDisableOtherPPE] = useState(false);
   const [earSymptoms, setEarSymptoms] = useState("");
 
   useEffect(() => {
@@ -42,40 +48,74 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
     return { color: "red.300", label: "โรคอ้วนอันตราย" };
   };
 
+  const handleDiseasesChange = (value) => {
+    if (value.includes("ไม่มี")) {
+      setFieldValue("disease", ["ไม่มี"]);
+      setDisableOtherDiseases(true);
+    } else {
+      setFieldValue("disease", value);
+      setDisableOtherDiseases(false);
+    }
+  };
+
   const isFormValid = () => {
-    return values.medical && values.diseases && values.earSymptoms;
+    return values.medical && values.disease && values.earSymptoms;
   };
 
   return (
     <Stack spacing={4}>
-      <FormControl>
-        <FormLabel>น้ำหนัก*</FormLabel>
+      <FormControl isInvalid={!!errors.bodyWeight && touched.bodyWeight}>
+        <FormLabel>น้ำหนักร่างกาย*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="bodyWeight"
-            placeholder="น้ำหนัก"
+            placeholder="ใส่เฉพาะตัวเลข"
             min={10}
-            step={10}
+            step={1}
+            validate={(value) => {
+              let error;
+              if (value === 0) {
+                error = "ข้อมูลน้ำหนักร่างกายต้องไม่ต่ำกว่า 1 กิโลกรัม";
+              } else if (!value) {
+                error = "กรุณาใส่ข้อมูลน้ำหนักร่างกาย";
+              } else if (value < 1) {
+                error = "ข้อมูลน้ำหนักร่างกายต้องไม่ต่ำกว่า 1 กิโลกรัม";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>กิโลกรัม</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.bodyWeight}</FormErrorMessage>
       </FormControl>
 
-      <FormControl>
-        <FormLabel>ส่วนสูง*</FormLabel>
+      <FormControl isInvalid={!!errors.bodyHeight && touched.bodyHeight}>
+        <FormLabel>ส่วนสูงร่างกาย*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="bodyHeight"
-            placeholder="ส่วนสูง"
-            min={10}
-            step={10}
+            placeholder="ใส่เฉพาะตัวเลข"
+            min={50}
+            step={1}
+            validate={(value) => {
+              let error;
+              if (value === 0) {
+                error = "ข้อมูลส่วนสูงร่างกายต้องไม่ต่ำกว่า 1 เซนติเมตร";
+              } else if (!value) {
+                error = "กรุณาใส่ข้อมูลส่วนสูงร่างกาย";
+              } else if (value < 1) {
+                error = "ข้อมูลส่วนสูงร่างกายต้องไม่ต่ำกว่า 1 เซนติเมตร";
+              }
+              return error;
+            }}
           />
           <InputRightAddon>เซนติเมตร</InputRightAddon>
         </InputGroup>
+        <FormErrorMessage>{errors.bodyHeight}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
@@ -91,25 +131,80 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
         </InputGroup>
       </FormControl>
 
-      <FormControl>
+      <FormControl isInvalid={!!errors.medical && touched.medical}>
         <FormLabel>สิทธิการรักษาพยาบาล*</FormLabel>
-        <Field as={Select} name="medical">
+        <Field
+          as={Select}
+          name="medical"
+          validate={(value) => {
+            let error;
+            if (!value) {
+              error = "กรุณาเลือกสิทธิการรักษาพยาบาล";
+            }
+            return error;
+          }}
+        >
           {medicalOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </Field>
+        <FormErrorMessage>{errors.medical}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
         <FormLabel>โรคประจำตัว*</FormLabel>
-        <Field as={Select} name="diseases">
-          {diseaseOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+        <Field name="disease">
+          {({ field }) => (
+            <CheckboxGroup
+              value={field.value}
+              onChange={(value) => handleDiseasesChange(value)}
+            >
+              <Stack spacing={2} align="start">
+                <Checkbox value="ไม่มี">ไม่มี</Checkbox>
+                <Checkbox
+                  value="โรคปอดฝุ่นหิน"
+                  isDisabled={disableOtherDiseases}
+                >
+                  โรคปอดฝุ่นหิน (ซิลิโคสิส)
+                </Checkbox>
+                <Checkbox value="โรคเบาหวาน" isDisabled={disableOtherDiseases}>
+                  โรคเบาหวาน
+                </Checkbox>
+                <Checkbox
+                  value="โรคหลอดเลือดสมองและหัวใจ"
+                  isDisabled={disableOtherDiseases}
+                >
+                  โรคหลอดเลือดสมองและหัวใจ
+                </Checkbox>
+                <Checkbox
+                  value="โรคถุงลมโป่งพอง"
+                  isDisabled={disableOtherDiseases}
+                >
+                  โรคถุงลมโป่งพอง
+                </Checkbox>
+                <Checkbox value="โรคมะเร็ง" isDisabled={disableOtherDiseases}>
+                  โรคมะเร็ง
+                </Checkbox>
+                <Checkbox
+                  value="โรคความดันโลหิตสูง"
+                  isDisabled={disableOtherDiseases}
+                >
+                  โรคความดันโลหิตสูง
+                </Checkbox>
+                <Checkbox
+                  value="โรคไขมันในเลือดสูง"
+                  isDisabled={disableOtherDiseases}
+                >
+                  โรคไขมันในเลือดสูง
+                </Checkbox>
+                <Checkbox value="อื่น ๆ" isDisabled={disableOtherDiseases}>
+                  อื่น ๆ
+                </Checkbox>
+              </Stack>
+            </CheckboxGroup>
+          )}
         </Field>
       </FormControl>
 
