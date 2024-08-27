@@ -13,21 +13,49 @@ export default async function handler(req, res) {
       nation,
     } = req.body;
 
+    // Check for missing required fields
+    const missingFields = [];
+    if (!firstName) missingFields.push("firstName");
+    if (!lastName) missingFields.push("lastName");
+    if (!phoneNumber) missingFields.push("phoneNumber");
+
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        message: `Missing required fields: ${missingFields.join(", ")}`,
+      });
+    }
+
     try {
+      const { data: existingRecords, error: fetchError } = await supabase
+        .from("personal")
+        .select("id")
+        .eq("first_name", firstName)
+        .eq("last_name", lastName);
+
+      if (fetchError) throw fetchError;
+
+      if (existingRecords.length > 0) {
+        return res.status(409).json({
+          message:
+            "Record with the same first name and last name already exists",
+        });
+      }
+
+      const dataToInsert = {
+        gender,
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: phoneNumber,
+        age,
+        nation,
+      };
+
+      if (idNumber) dataToInsert.id_number = idNumber;
+      if (birth) dataToInsert.birth = birth;
+
       const { data, error } = await supabase
         .from("personal")
-        .insert([
-          {
-            id_number: idNumber,
-            gender: gender,
-            first_name: firstName,
-            last_name: lastName,
-            phone_number: phoneNumber,
-            birth: birth,
-            age: age,
-            nation: nation,
-          },
-        ])
+        .insert([dataToInsert])
         .select();
 
       if (error) throw error;
@@ -36,7 +64,7 @@ export default async function handler(req, res) {
 
       res.status(200).json({ personalId });
     } catch (error) {
-      console.error("Error inserting personal data:", error.message);
+      console.error("Error processing request:", error.message);
       res.status(500).json({ error: error.message });
     }
   } else {

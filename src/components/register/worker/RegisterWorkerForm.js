@@ -6,27 +6,38 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useToast,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import axios from "axios";
 import PersonalInfoTab from "./PersonalInfoTab";
 import WorkInfoTab from "./WorkInfoTab";
 import HealthInfoTab from "./HealthInfoTab";
+import { useRouter } from "next/router";
 
 export default function RegisterWorkerForm() {
   const [tabIndex, setTabIndex] = useState(0);
-  const [submissionError, setSubmissionError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const router = useRouter();
 
-  const nextTab = () => setTabIndex((prevIndex) => prevIndex + 1);
-  const prevTab = () => setTabIndex((prevIndex) => prevIndex - 1);
-  const resetTab = () => setTabIndex(0);
+  const nextTab = () => {
+    setTabIndex((prevIndex) => prevIndex + 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-  const handleSubmit = async (
-    values,
-    actions,
-    resetTab,
-    setSubmissionError
-  ) => {
+  const prevTab = () => {
+    setTabIndex((prevIndex) => prevIndex - 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const resetTab = () => {
+    setTabIndex(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSubmit = async (values, actions, resetTab) => {
+    setLoading(true);
     try {
       const { data: personalData } = await axios.post("/api/personal", {
         idNumber: values.idNumber,
@@ -72,21 +83,54 @@ export default function RegisterWorkerForm() {
           bodyHeight: values.bodyHeight,
           bmi: values.bmi,
           medical: values.medical,
-          diseases: values.diseases,
+          disease: values.disease,
           earSymptoms: values.earSymptoms,
           earSymptomsDetails: values.earSymptomsDetails,
         }),
       ]);
 
+      toast({
+        title: "ลงทะเบียนสำเร็จ",
+        description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
       actions.resetForm();
-      resetTab();
-      setSubmissionError(null);
+      setTimeout(() => {
+        router.push("/");
+      }, 5000);
     } catch (error) {
-      console.error("Failed to submit form", error);
-      setSubmissionError(
-        "An error occurred while submitting the form. Please try again."
-      );
+      if (error.response) {
+        if (error.response.status === 409) {
+          toast({
+            title: "ระบบมีข้อมูลของท่านอยู่แล้ว",
+            description: "กรุณากลับสู่หน้าหลัก เพื่อประเมินความเสี่ยง",
+            status: "warning",
+            duration: 3000,
+            isClosable: true,
+          });
+        } else if (error.response.status >= 400) {
+          toast({
+            title: "ข้อมูลไม่ครบถ้วน",
+            description: "กรุณาตรวจสอบการกรอกข้อมูลของท่าน",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      } else {
+        toast({
+          title: "พบปัญหาการเชื่อมต่อ",
+          description: "ระบบขัดข้องกรุณาติดต่อเจ้าหน้าที่",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     } finally {
+      setLoading(false);
       actions.setSubmitting(false);
     }
   };
@@ -121,15 +165,13 @@ export default function RegisterWorkerForm() {
         bodyHeight: "",
         bmi: "",
         medical: "",
-        diseases: "",
+        disease: "",
         earSymptoms: "",
         earSymptomsDetails: "",
       }}
-      onSubmit={(values, actions) =>
-        handleSubmit(values, actions, resetTab, setSubmissionError)
-      }
+      onSubmit={(values, actions) => handleSubmit(values, actions, resetTab)}
     >
-      {({ isSubmitting, resetForm }) => (
+      {({ isSubmitting, resetForm, errors, touched }) => (
         <Form>
           <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)}>
             <TabList>
@@ -140,22 +182,36 @@ export default function RegisterWorkerForm() {
 
             <TabPanels>
               <TabPanel>
-                <PersonalInfoTab nextTab={nextTab} />
+                <PersonalInfoTab
+                  nextTab={nextTab}
+                  errors={errors}
+                  touched={touched}
+                />
               </TabPanel>
 
               <TabPanel>
-                <WorkInfoTab nextTab={nextTab} prevTab={prevTab} />
+                <WorkInfoTab
+                  nextTab={nextTab}
+                  prevTab={prevTab}
+                  errors={errors}
+                  touched={touched}
+                />
               </TabPanel>
 
               <TabPanel>
-                <HealthInfoTab prevTab={prevTab} isLoading={isSubmitting} />
+                <HealthInfoTab
+                  prevTab={prevTab}
+                  isLoading={isSubmitting}
+                  errors={errors}
+                  touched={touched}
+                />
                 <Button
                   type="button"
                   onClick={() => {
                     resetForm();
                     resetTab();
                   }}
-                  isDisabled={isSubmitting}
+                  isDisabled={isSubmitting || loading}
                   className="w-full mt-4"
                 >
                   ล้างข้อมูล
@@ -163,12 +219,6 @@ export default function RegisterWorkerForm() {
               </TabPanel>
             </TabPanels>
           </Tabs>
-
-          {submissionError && (
-            <div style={{ color: "red", marginTop: "10px" }}>
-              {submissionError}
-            </div>
-          )}
         </Form>
       )}
     </Formik>
