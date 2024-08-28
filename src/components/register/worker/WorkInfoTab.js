@@ -178,15 +178,15 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
                 error = "กรุณาใส่ข้อมูลวันทำงานต่อสัปดาห์";
               } else if (value < 1) {
                 error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่ต่ำกว่า 1 วัน";
-              } else if (value > 7) {
-                error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่เกินกว่า 7 วัน";
+              } else if (value > 24) {
+                error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่เกินกว่า 24 วัน";
               }
               return error;
             }}
           />
           <InputRightAddon>วัน</InputRightAddon>
         </InputGroup>
-        <FormErrorMessage>{errors.workingYears}</FormErrorMessage>
+        <FormErrorMessage>{errors.workingWeeks}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.workingYears && touched.workingYears}>

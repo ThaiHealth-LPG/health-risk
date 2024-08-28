@@ -17,17 +17,22 @@ export const HearingLossRiskProvider = ({ children }) => {
     const riskScore =
       10.255 + 0.029 * X1 + 0.481 * X2 + 0.398 * X3 - 0.679 * X4;
 
-    const roundedRiskScore = parseFloat(riskScore.toFixed(2));
+    const constrainedRiskScore = Math.max(
+      0,
+      Math.min(25, parseFloat(riskScore.toFixed(2)))
+    );
 
     const riskLevel = riskScore / 5;
+    const constrainedRiskLevel = Math.max(
+      0,
+      Math.min(5, parseFloat(riskLevel.toFixed(1)))
+    );
 
-    const roundedRiskLevel = parseFloat(riskLevel.toFixed(1));
+    setHearingLossRiskScore(constrainedRiskScore);
+    setHearingLossRiskLevel(constrainedRiskLevel);
 
-    setHearingLossRiskScore(roundedRiskScore);
-    setHearingLossRiskLevel(roundedRiskLevel);
-
-    console.log(`Calculated Hearing Loss Risk Score: ${roundedRiskScore}`);
-    console.log(`Categorized Risk Level: ${roundedRiskLevel}`);
+    console.log(`Calculated Hearing Loss Risk Score: ${constrainedRiskScore}`);
+    console.log(`Categorized Risk Level: ${constrainedRiskLevel}`);
   };
 
   const resetHearingLossRisk = () => {
