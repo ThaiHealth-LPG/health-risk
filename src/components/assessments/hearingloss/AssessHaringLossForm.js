@@ -16,7 +16,7 @@ import {
   FormControl,
   FormLabel,
   Stack,
-  Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import AssessHearingLossTab from "./AssessHearingLossTab";
@@ -26,13 +26,13 @@ import AssessHaringLossResult from "./AssessHaringLossResult";
 import { MdNavigateBefore } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function AssessHearingLossForm() {
   const [tabIndex, setTabIndex] = useState(0);
   const [nameNotFound, setNameNotFound] = useState(false);
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   const {
     hearingLossRiskScore,
@@ -42,7 +42,6 @@ export default function AssessHearingLossForm() {
   } = useHearingLossRisk();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
 
   useEffect(() => {
     resetHearingLossRisk();
@@ -53,8 +52,15 @@ export default function AssessHearingLossForm() {
     try {
       calculateHearingLossRisk(values);
       setTabIndex(1);
-    } catch (error) {
-      console.log(error);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      toast({
+        title: "พบปัญหาการเชื่อมต่อ",
+        description: "ระบบขัดข้องกรุณาติดต่อเจ้าหน้าที่",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -64,6 +70,7 @@ export default function AssessHearingLossForm() {
       const response = await axios.post("/api/hearingloss", {
         position: values.position,
         noise: values.noise,
+        noiseLevel: values.noiseLevel,
         workingHours: values.workingHours,
         bodyHeight: values.bodyHeight,
         earSymptoms: values.earSymptoms,
@@ -79,18 +86,31 @@ export default function AssessHearingLossForm() {
         return;
       }
 
-      console.log("Data saved successfully:", response.data);
+      toast({
+        title: "บันทึกข้อมูลสำเร็จ",
+        description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       resetForm();
-      resetHearingLossRisk();
-      router.push("/");
+      onClose();
+      setNameNotFound(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
-      console.log("Failed to save data. Please try again later.");
       if (error.response && error.response.status === 404) {
         setNameNotFound(true);
       } else {
-        console.error("Error saving risk data:", error.message);
+        toast({
+          title: "พบปัญหาการเชื่อมต่อ",
+          description: "ระบบขัดข้องกรุณาติดต่อเจ้าหน้าที่",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
         setNameNotFound(false);
       }
+    } finally {
       setLoading(false);
     }
   };
@@ -102,6 +122,7 @@ export default function AssessHearingLossForm() {
       initialValues={{
         position: "",
         noise: "",
+        noiseLevel: "",
         workingHours: "",
         bodyHeight: "",
         earSymptoms: "",
@@ -123,6 +144,7 @@ export default function AssessHearingLossForm() {
                     resetForm();
                     resetTab();
                     resetHearingLossRisk();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="w-full mt-4"
                 >
@@ -139,6 +161,7 @@ export default function AssessHearingLossForm() {
                       resetForm();
                       resetTab();
                       resetHearingLossRisk();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
                     className="w-full"
                   >

@@ -1,14 +1,14 @@
 import React from "react";
 import MenuCard from "./MenuCard";
-import { PiGauge } from "react-icons/pi";
 import { GrUserWorker } from "react-icons/gr";
 import { TbInfoTriangleFilled } from "react-icons/tb";
+import { PiUserSoundFill } from "react-icons/pi";
 
 const MenuData = [
   {
     title: "ประเมินความเสี่ยง",
     desc: "การรับสัมผัสเสียงดัง",
-    icon: PiGauge,
+    icon: PiUserSoundFill,
     color: "bg-accent",
     link: "/assessment/hearingloss",
   },

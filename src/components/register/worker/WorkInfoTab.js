@@ -29,7 +29,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
       (option) => option.value === values.position
     );
     if (selectedPosition) {
-      setFieldValue("noise", selectedPosition.noise || "");
+      setFieldValue("noise", selectedPosition.noiseAvg || "");
     }
   }, [values.position, setFieldValue]);
 
@@ -105,7 +105,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.noise && touched.noise}>
-        <FormLabel>ระดับความดันเสียง*</FormLabel>
+        <FormLabel>ระดับเสียง*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
