@@ -93,14 +93,14 @@ export default function RegisterWorkerForm() {
         title: "ลงทะเบียนสำเร็จ",
         description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
         status: "success",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
 
       actions.resetForm();
       setTimeout(() => {
         router.push("/");
-      }, 5000);
+      }, 3000);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 409) {
@@ -210,6 +210,7 @@ export default function RegisterWorkerForm() {
                   onClick={() => {
                     resetForm();
                     resetTab();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   isDisabled={isSubmitting || loading}
                   className="w-full mt-4"

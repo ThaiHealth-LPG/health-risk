@@ -13,7 +13,6 @@ export default async function handler(req, res) {
       nation,
     } = req.body;
 
-    // Check for missing required fields
     const missingFields = [];
     if (!firstName) missingFields.push("firstName");
     if (!lastName) missingFields.push("lastName");

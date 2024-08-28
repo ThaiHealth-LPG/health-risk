@@ -166,6 +166,12 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
                   value="โรคปอดฝุ่นหิน"
                   isDisabled={disableOtherDiseases}
                 >
+                  โรคประสาทหูเสื่อม/สูญเสียการได้ยิน
+                </Checkbox>
+                <Checkbox
+                  value="โรคประสาทหูเสื่อม"
+                  isDisabled={disableOtherDiseases}
+                >
                   โรคปอดฝุ่นหิน (ซิลิโคสิส)
                 </Checkbox>
                 <Checkbox value="โรคเบาหวาน" isDisabled={disableOtherDiseases}>
