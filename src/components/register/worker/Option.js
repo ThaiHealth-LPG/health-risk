@@ -26,11 +26,34 @@ export const workOptions = [
 
 export const positionOptions = [
   { value: "", label: "เลือกตำแหน่งงาน", noise: "" },
-  { value: "ขุดหิน (ลงบ่อหิน)", label: "ขุดหิน (ลงบ่อหิน)", noise: 95.09 },
-  { value: "ผ่าหิน", label: "ผ่าหิน", noise: 98.26 },
-  { value: "ต๊อกหิน", label: "ต๊อกหิน", noise: 98.26 },
-  { value: "แกะสลักหิน", label: "แกะสลักหิน", noise: 84.39 },
-  { value: "อื่น ๆ", label: "อื่น ๆ", noise: "" },
+  {
+    value: "ขุดเจาะหิน",
+    label: "ขุดเจาะหิน",
+    noiseAvg: 95.09,
+    noiseMin: 81,
+    noiseMax: 102,
+  },
+  {
+    value: "ผ่าหิน/ตกแต่งหิน",
+    label: "ผ่าหิน/ตกแต่งหิน",
+    noiseAvg: 98.26,
+    noiseMin: 82,
+    noiseMax: 102,
+  },
+  {
+    value: "แกะสลักหิน (ครกหิน)",
+    label: "แกะสลักหิน (ครกหิน)",
+    noiseAvg: 84.39,
+    noiseMin: 64,
+    noiseMax: 102,
+  },
+  {
+    value: "อื่น ๆ",
+    label: "อื่น ๆ",
+    noiseAvg: "",
+    noiseMin: "",
+    noiseMax: "",
+  },
 ];
 
 export const nationOptions = [

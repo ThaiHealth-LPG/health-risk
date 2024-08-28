@@ -5,6 +5,7 @@ export default async function handler(req, res) {
     const {
       position,
       noise,
+      noiseLevel,
       workingHours,
       bodyHeight,
       earSymptoms,
@@ -15,9 +16,6 @@ export default async function handler(req, res) {
     } = req.body;
 
     try {
-      console.log("Request Body:", req.body); // Debugging statement
-
-      // Step 1: Look up the personalId based on firstName and lastName
       const { data: personalData, error: personalError } = await supabase
         .from("personal")
         .select("id")
@@ -33,12 +31,12 @@ export default async function handler(req, res) {
 
       const personalId = personalData.id;
 
-      // Step 2: Insert the data into the hearingloss table
       const { data, error } = await supabase.from("hearingloss").insert([
         {
           personal_id: personalId,
           position,
           noise,
+          noise_level: noiseLevel,
           working_hours: workingHours,
           body_height: bodyHeight,
           ear_symptoms: earSymptoms,
@@ -47,14 +45,9 @@ export default async function handler(req, res) {
         },
       ]);
 
-      if (error) {
-        console.error("Insert Error:", error.message); // Debugging statement
-        throw error;
-      }
-
       res.status(200).json({ success: true, data });
     } catch (error) {
-      console.error("Catch Error:", error.message); // Debugging statement
+      console.error("Catch Error:", error.message);
       res.status(500).json({ success: false, error: error.message });
     }
   } else {

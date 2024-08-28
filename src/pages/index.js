@@ -6,7 +6,8 @@ export default function Home() {
     <div className="min-h-screen w-full bg-success-light flex flex-col justify-between">
       <Head>
         <title>
-          ระบบประเมินความเสี่ยงทางสุขภาพกลุ่มอาชีพทำครกหิน อ.เมือง จ.ลำปาง
+          ระบบประเมินความเสี่ยงทางสุขภาพจากการรับสัมผัสเสียงดังกลุ่มอาชีพทำครกหิน
+          อ.เมือง จ.ลำปาง
         </title>
         <meta name="description" content="Health Risk Assessment Application" />
       </Head>
@@ -14,7 +15,9 @@ export default function Home() {
       <div className="max-w-[1024px] w-full mx-auto flex flex-col justify-start text-bases-content p-5 gap-3">
         <div>
           <h1 className="text-2xl">ยินดีต้อนรับ!</h1>
-          <h2 className="text-xl">เข้าสู่ระบบประเมินความเสี่ยงทางสุขภาพ</h2>
+          <h2 className="text-xl">
+            เข้าสู่ระบบประเมินความเสี่ยงทางสุขภาพจากการรับสัมผัสเสียงดัง
+          </h2>
           <h2 className="text-xl">กลุ่มอาชีพทำครกหิน อ.เมือง จ.ลำปาง</h2>
         </div>
 
