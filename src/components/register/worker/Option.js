@@ -24,25 +24,25 @@ export const workOptions = [
   { value: "อยู่บริเวณที่พักอาศัย", label: "อยู่บริเวณที่พักอาศัย" },
 ];
 
-export const positionOptions = [
+export const noiseOptions = [
   { value: "", label: "เลือกตำแหน่งงาน", noise: "" },
   {
-    value: "ขุดเจาะหิน",
-    label: "ขุดเจาะหิน",
+    value: "เจาะหิน",
+    label: "เจาะหิน",
     noiseAvg: 95.09,
     noiseMin: 81,
     noiseMax: 102,
   },
   {
-    value: "ผ่าหิน/ตกแต่งหิน",
-    label: "ผ่าหิน/ตกแต่งหิน",
+    value: "ตัดหิน/ผ่าหิน",
+    label: "ตัดหิน/ผ่าหิน",
     noiseAvg: 98.26,
     noiseMin: 82,
     noiseMax: 102,
   },
   {
-    value: "แกะสลักหิน (ครกหิน)",
-    label: "แกะสลักหิน (ครกหิน)",
+    value: "เจียร์/แกะสลักหิน",
+    label: "เจียร์/แกะสลักหิน",
     noiseAvg: 84.39,
     noiseMin: 64,
     noiseMax: 102,
@@ -53,6 +53,59 @@ export const positionOptions = [
     noiseAvg: "",
     noiseMin: "",
     noiseMax: "",
+  },
+];
+
+export const vibrationOptions = [
+  {
+    value: "",
+    label: "",
+    vibrateX: "",
+    vibrateY: "",
+    vibrateZ: "",
+    vibrateAvg: "",
+    vibrateTime: "",
+    vibrateTwa: "",
+  },
+  {
+    value: "เจาะหิน",
+    label: "เจาะหิน",
+    vibrateX: 5.04,
+    vibrateY: 5,
+    vibrateZ: 5.85,
+    vibrateAvg: 9.26,
+    vibrateTime: 6.89,
+    vibrateTwa: 8.57,
+  },
+  {
+    value: "ตัดหิน/ผ่าหิน",
+    label: "ตัดหิน/ผ่าหิน",
+    vibrateX: 5.05,
+    vibrateY: 4.89,
+    vibrateZ: 6.05,
+    vibrateAvg: 9.32,
+    vibrateTime: 6.19,
+    vibrateTwa: 8.11,
+  },
+  {
+    value: "เจียร์/แกะสลักหิน",
+    label: "เจียร์/แกะสลักหิน",
+    vibrateX: 5.33,
+    vibrateY: 5.23,
+    vibrateZ: 6.33,
+    vibrateAvg: 9.84,
+    vibrateTime: 6.23,
+    vibrateTwa: 8.64,
+  },
+  {
+    value: "อื่น ๆ",
+    label: "อื่น ๆ",
+    vibrateX: "",
+    vibrateY: "",
+    vibrateZ: "",
+    vibrateAvg: "",
+    vibrateTime: "",
+    vibrateTwa: "",
   },
 ];
 

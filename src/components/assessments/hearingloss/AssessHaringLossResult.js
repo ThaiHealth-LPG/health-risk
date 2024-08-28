@@ -10,9 +10,9 @@ export default function AssessHaringLossResult({ riskLevel }) {
     <div className={`p-4 rounded-md border-2 ${details.border}`}>
       <div className="space-y-4">
         <p className="text-center text-md">
-          มีผลกระทบทางสุขภาพ
+          ท่านมีความเสี่ยงทางสุขภาพ
           <br />
-          จากการประกอบอาชีพแกะสลักหิน
+          จากการรับสัมผัสเสียงดัง
         </p>
         <h3 className={`text-center text-3xl font-bold ${details.textColor}`}>
           ระดับ{details.level}
