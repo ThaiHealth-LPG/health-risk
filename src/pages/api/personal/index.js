@@ -3,7 +3,6 @@ import { supabase } from "../../../../lib/supabase";
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const {
-      id,
       idNumber,
       gender,
       firstName,
@@ -42,7 +41,6 @@ export default async function handler(req, res) {
       }
 
       const dataToInsert = {
-        id,
         gender,
         first_name: firstName,
         last_name: lastName,
