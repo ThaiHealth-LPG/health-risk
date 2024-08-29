@@ -43,8 +43,8 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
       return { color: "blue.300", label: "น้ำหนักต่ำกว่าเกณฑ์" };
     if (bmiValue < 23) return { color: "green.300", label: "สมส่วน" };
     if (bmiValue < 25) return { color: "yellow.300", label: "น้ำหนักเกิน" };
-    if (bmiValue < 30) return { color: "orange.300", label: "โรคอ้วน" };
-    return { color: "red.300", label: "โรคอ้วนอันตราย" };
+    if (bmiValue < 30) return { color: "orange.300", label: "ภาวะอ้วน" };
+    return { color: "red.300", label: "ภาวะอ้วนอันตราย" };
   };
 
   const handleDiseasesChange = (value) => {

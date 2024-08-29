@@ -50,8 +50,21 @@ export default async function handler(req, res) {
       console.error("Catch Error:", error.message);
       res.status(500).json({ success: false, error: error.message });
     }
+  } else if (req.method === "GET") {
+    try {
+      const { data, error } = await supabase.from("hearingloss").select("*");
+
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).json({ success: true, data });
+    } catch (error) {
+      console.error("Catch Error:", error.message);
+      res.status(500).json({ success: false, error: error.message });
+    }
   } else {
-    res.setHeader("Allow", ["POST"]);
+    res.setHeader("Allow", ["POST", "GET"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
