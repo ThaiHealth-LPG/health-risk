@@ -12,10 +12,11 @@ import {
   Button,
   FormErrorMessage,
   useToast,
+  InputLeftAddon,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
 import { useEffect, useState } from "react";
-import { positionOptions, workOptions } from "./Option";
+import { noiseOptions, vibrationOptions, workOptions } from "./Option";
 import { MdNavigateBefore, MdNavigateNext, MdLocationOn } from "react-icons/md";
 
 export default function WorkInfoTab({ nextTab, prevTab }) {
@@ -25,11 +26,23 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
   const toast = useToast();
 
   useEffect(() => {
-    const selectedPosition = positionOptions.find(
+    const selectedNoisePosition = noiseOptions.find(
       (option) => option.value === values.position
     );
-    if (selectedPosition) {
-      setFieldValue("noise", selectedPosition.noiseAvg || "");
+    const selectedVibrationPosition = vibrationOptions.find(
+      (option) => option.value === values.position
+    );
+
+    if (selectedNoisePosition) {
+      setFieldValue("noise", selectedNoisePosition.noiseAvg || "");
+    }
+
+    if (selectedVibrationPosition) {
+      setFieldValue("vibrateX", selectedVibrationPosition.vibrateX || "");
+      setFieldValue("vibrateY", selectedVibrationPosition.vibrateY || "");
+      setFieldValue("vibrateZ", selectedVibrationPosition.vibrateZ || "");
+      setFieldValue("vibrateAvg", selectedVibrationPosition.vibrateAvg || "");
+      setFieldValue("vibrateTwa", selectedVibrationPosition.vibrateTwa || "");
     }
   }, [values.position, setFieldValue]);
 
@@ -95,7 +108,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
             return error;
           }}
         >
-          {positionOptions.map((option) => (
+          {noiseOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -127,6 +140,64 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
           <InputRightAddon>dB(A)</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.noise}</FormErrorMessage>
+      </FormControl>
+
+      <FormControl>
+        <FormLabel>
+          ค่าการสั่นสะเทือน (m/s<sup>2</sup>)
+        </FormLabel>
+        <div className="grid grid-cols-2 gap-2 max-md:grid-cols-1">
+          <InputGroup>
+            <InputLeftAddon>แกน X</InputLeftAddon>
+            <Field
+              as={Input}
+              type="number"
+              name="vibrateX"
+              placeholder="ใส่เฉพาะตัวเลข"
+              step={0.01}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon>แกน Y</InputLeftAddon>
+            <Field
+              as={Input}
+              type="number"
+              name="vibrateY"
+              placeholder="ใส่เฉพาะตัวเลข"
+              step={0.01}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon>แกน Z</InputLeftAddon>
+            <Field
+              as={Input}
+              type="number"
+              name="vibrateZ"
+              placeholder="ใส่เฉพาะตัวเลข"
+              step={0.01}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon>ค่าเฉลี่ยความเร่ง</InputLeftAddon>
+            <Field
+              as={Input}
+              type="number"
+              name="vibrateAvg"
+              placeholder="ใส่เฉพาะตัวเลข"
+              step={0.01}
+            ></Field>
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon>ค่าเฉลี่ยรับสัมผัสใน 1 วัน</InputLeftAddon>
+            <Field
+              as={Input}
+              type="number"
+              name="vibrateTwa"
+              placeholder="ใส่เฉพาะตัวเลข"
+              step={0.01}
+            />
+          </InputGroup>
+        </div>
       </FormControl>
 
       <FormControl isInvalid={!!errors.workingHours && touched.workingHours}>
@@ -178,15 +249,15 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
                 error = "กรุณาใส่ข้อมูลวันทำงานต่อสัปดาห์";
               } else if (value < 1) {
                 error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่ต่ำกว่า 1 วัน";
-              } else if (value > 7) {
-                error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่เกินกว่า 7 วัน";
+              } else if (value > 24) {
+                error = "ข้อมูลวันทำงานต่อสัปดาห์ต้องไม่เกินกว่า 24 วัน";
               }
               return error;
             }}
           />
           <InputRightAddon>วัน</InputRightAddon>
         </InputGroup>
-        <FormErrorMessage>{errors.workingYears}</FormErrorMessage>
+        <FormErrorMessage>{errors.workingWeeks}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.workingYears && touched.workingYears}>

@@ -100,10 +100,10 @@ export default function PersonalInfoTab({ nextTab }) {
         <FormLabel as="legend">เพศ*</FormLabel>
         <RadioGroup name="gender" onBlur={handleBlur}>
           <Stack direction="row" spacing={4}>
-            <Field as={Radio} name="gender" value="male">
+            <Field as={Radio} name="gender" value="ชาย">
               ชาย
             </Field>
-            <Field as={Radio} name="gender" value="female">
+            <Field as={Radio} name="gender" value="หญิง">
               หญิง
             </Field>
           </Stack>
