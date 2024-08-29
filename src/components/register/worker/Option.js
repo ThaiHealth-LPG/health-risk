@@ -38,7 +38,7 @@ export const noiseOptions = [
     label: "ตัดหิน/ผ่าหิน",
     noiseAvg: 98.26,
     noiseMin: 82,
-    noiseMax: 102,
+    noiseMax: 101,
   },
   {
     value: "เจียร์/แกะสลักหิน",

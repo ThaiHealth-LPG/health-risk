@@ -33,6 +33,7 @@ export default async function handler(req, res) {
 
       const { data, error } = await supabase.from("hearingloss").insert([
         {
+          id,
           personal_id: personalId,
           position,
           noise,

@@ -3,6 +3,7 @@ import { supabase } from "../../../../lib/supabase";
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const {
+      id,
       idNumber,
       gender,
       firstName,
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
       }
 
       const dataToInsert = {
+        id,
         gender,
         first_name: firstName,
         last_name: lastName,
@@ -66,8 +68,19 @@ export default async function handler(req, res) {
       console.error("Error processing request:", error.message);
       res.status(500).json({ error: error.message });
     }
+  } else if (req.method === "GET") {
+    try {
+      const { data, error } = await supabase.from("personal").select("*");
+
+      if (error) throw error;
+
+      res.status(200).json(data);
+    } catch (error) {
+      console.error("Error fetching records:", error.message);
+      res.status(500).json({ error: error.message });
+    }
   } else {
-    res.setHeader("Allow", ["POST"]);
+    res.setHeader("Allow", ["POST", "GET"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
