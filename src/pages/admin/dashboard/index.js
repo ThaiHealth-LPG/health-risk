@@ -6,7 +6,7 @@ import HearingLossChart from "@/components/charts/HearingLossChart";
 import WorkLocation from "@/components/map/WorkLocation";
 import WorkingHearingLossChart from "@/components/charts/WorkingHearingLossChart";
 
-export default function AdminDashboard() {
+export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen w-full">
       <Head>

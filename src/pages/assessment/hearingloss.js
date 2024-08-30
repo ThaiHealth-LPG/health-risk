@@ -4,7 +4,7 @@ import { MdNavigateBefore } from "react-icons/md";
 import Link from "next/link";
 import AssessHaringLossForm from "@/components/assessments/hearingloss/AssessHaringLossForm";
 
-export default function AssessmentHearingLoss() {
+export default function AssessmentHearingLossPage() {
   return (
     <div className="min-h-screen w-full bg-bases">
       <Head>

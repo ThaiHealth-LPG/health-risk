@@ -1,7 +1,7 @@
 import Menu from "@/components/home/Menu";
 import Head from "next/head";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="min-h-screen w-full bg-success-light flex flex-col justify-between">
       <Head>

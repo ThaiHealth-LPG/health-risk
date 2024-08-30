@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Head from "next/head";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import WorkerList from "@/components/admin/WorkerList";
 
-export default function AdminWorkerList() {
+export default function AdminWorkerListPage() {
   return (
     <div className="min-h-screen w-full">
       <Head>
