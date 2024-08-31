@@ -1,4 +1,5 @@
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import UpdateWorkerForm from "@/components/worker/UpdateWorkerForm";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
@@ -19,7 +20,8 @@ export default function UpdateWorkerPage() {
         {/* sidebar */}
         <AdminSidebar />
 
-        {/* table worker-list */}
+        {/* update worker form */}
+        <UpdateWorkerForm />
       </div>
     </div>
   );
