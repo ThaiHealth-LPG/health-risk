@@ -18,6 +18,7 @@ import {
 import RiskBadge from "../badges/RiskBadge";
 import { RiFileEditLine } from "react-icons/ri";
 import { useRouter } from "next/router";
+import AudiometryBadge from "../badges/AudiometryBadge";
 
 export default function WorkerList() {
   const [workers, setWorkers] = useState([]);
@@ -26,8 +27,13 @@ export default function WorkerList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRiskLevel, setSelectedRiskLevel] = useState("");
+  const [selectedAudiometryResult, setSelectedAudiometryResult] = useState("");
   const router = useRouter();
   const workersPerPage = 10;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedRiskLevel, selectedAudiometryResult]);
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -71,6 +77,11 @@ export default function WorkerList() {
     return riskLevel >= min && riskLevel <= max;
   };
 
+  const matchesAudiometryResult = (audiometryResult, selectedResult) => {
+    if (selectedResult === "") return true;
+    return audiometryResult === selectedResult;
+  };
+
   const indexOfLastWorker = currentPage * workersPerPage;
   const indexOfFirstWorker = indexOfLastWorker - workersPerPage;
 
@@ -82,12 +93,17 @@ export default function WorkerList() {
 
     const lastThreeHearingloss = getLastThreeHearingloss(worker.hearingloss);
     const recentRiskLevel = worker.hearingloss[0]?.risk_level;
+    const recentAudiometryResult = worker.audiometry[0]?.audiometry_result;
 
     const matchesRisk =
       selectedRiskLevel === "" ||
       matchesRiskLevel(recentRiskLevel, selectedRiskLevel);
 
-    return matchesSearch && matchesRisk;
+    const matchesAudiometry =
+      selectedAudiometryResult === "" ||
+      matchesAudiometryResult(recentAudiometryResult, selectedAudiometryResult);
+
+    return matchesSearch && matchesRisk && matchesAudiometry;
   });
 
   const currentWorkers = filteredWorkers.slice(
@@ -119,21 +135,46 @@ export default function WorkerList() {
           <div className="flex gap-4">
             <Input
               placeholder="ค้นหาชื่อหรือนามสกุล"
+              className="text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              size="md"
+              size="sm"
             />
             <Select
               placeholder="เลือกระดับความเสี่ยง"
+              className="text-sm"
               value={selectedRiskLevel}
               onChange={(e) => setSelectedRiskLevel(e.target.value)}
-              size="md"
+              size="sm"
             >
-              <option value="0">ไม่มีนัยสำคัญ</option>
-              <option value="0.01-1.99">น้อย</option>
-              <option value="2.00-2.99">ปานกลาง</option>
-              <option value="3.00-3.99">สูง</option>
-              <option value=">4.00">สูงมาก</option>
+              <option value="0" className="text-sm">
+                ไม่มีนัยสำคัญ
+              </option>
+              <option value="0.01-1.99" className="text-sm">
+                น้อย
+              </option>
+              <option value="2.00-2.99" className="text-sm">
+                ปานกลาง
+              </option>
+              <option value="3.00-3.99" className="text-sm">
+                สูง
+              </option>
+              <option value=">4.00" className="text-sm">
+                สูงมาก
+              </option>
+            </Select>
+            <Select
+              placeholder="เลือกผลการตรวจวัดการได้ยิน"
+              value={selectedAudiometryResult}
+              onChange={(e) => setSelectedAudiometryResult(e.target.value)}
+              size="sm"
+            >
+              <option value="ปกติ" className="text-sm">
+                ปกติ
+              </option>
+              <option value="ผิดปกติ" className="text-sm">
+                ผิดปกติ
+              </option>
             </Select>
           </div>
         </div>
@@ -150,17 +191,18 @@ export default function WorkerList() {
         ) : (
           <>
             <TableContainer>
-              <Table variant="simple">
+              <Table variant="simple" size="sm">
                 <Thead>
                   <Tr>
-                    <Th>ลำดับ</Th>
-                    <Th>ชื่อ นามสกุล</Th>
-                    <Th>เพศ</Th>
-                    <Th>อายุ</Th>
-                    <Th>{"ระดับความเสี่ยง (ล่าสุด->ก่อนหน้า)"}</Th>
-                    <Th className="hidden">ความเสี่ยงล่าสุด</Th>
-                    <Th>ประเมินล่าสุด</Th>
-                    <Th></Th>
+                    <Th className="text-sm">ลำดับ</Th>
+                    <Th className="text-sm">ชื่อ นามสกุล</Th>
+                    <Th className="text-sm">เพศ</Th>
+                    <Th className="text-sm">อายุ</Th>
+                    <Th className="text-sm">ระดับความเสี่ยง</Th>
+                    <Th className="text-sm hidden">ความเสี่ยงล่าสุด</Th>
+                    <Th className="text-sm">ผลการตรวจวัดการได้ยิน</Th>
+                    <Th className="text-sm">รายละเอียด</Th>
+                    <Th className="text-sm"></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -171,14 +213,16 @@ export default function WorkerList() {
 
                     return (
                       <Tr key={worker.id}>
-                        <Td>{indexOfFirstWorker + index + 1}</Td>
-                        <Td className="flex gap-3">
-                          <span>{worker.first_name}</span>
-                          <span>{worker.last_name}</span>
+                        <Td className="text-sm">
+                          {indexOfFirstWorker + index + 1}
                         </Td>
-                        <Td>{worker.gender}</Td>
-                        <Td>{worker.age}</Td>
-                        <Td className="flex gap-1">
+                        <Td className="text-sm flex gap-3">
+                          <span className="text-sm">{worker.first_name}</span>
+                          <span className="text-sm">{worker.last_name}</span>
+                        </Td>
+                        <Td className="text-sm">{worker.gender}</Td>
+                        <Td className="text-sm">{worker.age}</Td>
+                        <Td className="text-sm flex gap-1">
                           {worker.hearingloss.length === 0 ? (
                             <span>ไม่พบข้อมูล</span>
                           ) : (
@@ -190,17 +234,25 @@ export default function WorkerList() {
                             ))
                           )}
                         </Td>
-                        <Td className="hidden">
+                        <Td className="text-sm hidden">
                           {worker.hearingloss[0]?.risk_level}
                         </Td>
-                        <Td>
-                          {worker.hearingloss.length === 0
-                            ? "ไม่พบข้อมูล"
-                            : new Date(
-                                worker.hearingloss[0]?.updated_at
-                              ).toLocaleDateString()}
+                        <Td className="text-sm">
+                          {worker.audiometry.length === 0 ? (
+                            <span className="text-sm">ไม่พบข้อมูล</span>
+                          ) : (
+                            <AudiometryBadge
+                              key={index}
+                              audiometry={
+                                worker.audiometry[0]?.audiometry_result
+                              }
+                            />
+                          )}
                         </Td>
-                        <Td>
+                        <Td className="text-sm">
+                          {worker.audiometry[0]?.audiometry_type}
+                        </Td>
+                        <Td className="text-sm">
                           <button
                             className="text-primary hover:text-accent"
                             onClick={() =>
@@ -227,7 +279,7 @@ export default function WorkerList() {
               >
                 Previous
               </Button>
-              <span>
+              <span className="text-sm">
                 Page {currentPage} of {totalPages}
               </span>
               <Button
