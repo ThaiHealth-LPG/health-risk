@@ -17,7 +17,7 @@ import { Field, Formik } from "formik";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { nationOptions } from "../register/worker/Option";
-import { MdLocationOn, MdNavigateNext } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 import { useRouter } from "next/router";
 
 export default function UpdatePersonalTab() {
@@ -45,7 +45,6 @@ export default function UpdatePersonalTab() {
   today.setDate(today.getDate() - 1);
   const maxDate = today.toISOString().split("T")[0];
 
-  // Fetch data and set it as initial values
   useEffect(() => {
     if (!personalId) return;
 
@@ -120,6 +119,18 @@ export default function UpdatePersonalTab() {
     }
   };
 
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      return age - 1;
+    }
+    return age;
+  };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -141,18 +152,6 @@ export default function UpdatePersonalTab() {
             setFieldValue("age", age);
           }
         }, [values.birth, setFieldValue]);
-
-        const calculateAge = (birthDate) => {
-          const today = new Date();
-          const age = today.getFullYear() - birthDate.getFullYear();
-          const monthDiff = today.getMonth() - birthDate.getMonth();
-          const dayDiff = today.getDate() - birthDate.getDate();
-
-          if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-            return age - 1;
-          }
-          return age;
-        };
 
         const handleGeolocation = () => {
           if (navigator.geolocation) {

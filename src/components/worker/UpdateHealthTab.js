@@ -20,6 +20,8 @@ import axios from "axios";
 import { medicalOptions } from "../register/worker/Option";
 
 export default function UpdateHealthTab() {
+  const [disableOtherDiseases, setDisableOtherDiseases] = useState(false);
+  const [earSymptoms, setEarSymptoms] = useState("");
   const toast = useToast();
   const router = useRouter();
   const { personalId } = router.query;
@@ -33,8 +35,6 @@ export default function UpdateHealthTab() {
     earSymptoms: "",
     earSymptomsDetails: "",
   });
-  const [disableOtherDiseases, setDisableOtherDiseases] = useState(false);
-  const [earSymptoms, setEarSymptoms] = useState("");
 
   useEffect(() => {
     if (!personalId) return;

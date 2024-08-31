@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { MdNavigateBefore } from "react-icons/md";
 import UpdatePersonalTab from "./UpdatePersonalTab";
 import UpdateHealthTab from "./UpdateHealthTab";
+import UpdateWorkTab from "./UpdateWorkTab";
 
 export default function UpdateWorkerForm() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -63,7 +64,9 @@ export default function UpdateWorkerForm() {
                 <UpdatePersonalTab />
               </TabPanel>
 
-              <TabPanel></TabPanel>
+              <TabPanel>
+                <UpdateWorkTab />
+              </TabPanel>
 
               <TabPanel>
                 <UpdateHealthTab />
