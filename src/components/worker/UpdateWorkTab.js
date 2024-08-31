@@ -133,6 +133,27 @@ export default function UpdateWorkTab() {
     }
   };
 
+  const updateFormValues = (position, setFieldValue) => {
+    const selectedNoisePosition = noiseOptions.find(
+      (option) => option.value === position
+    );
+    const selectedVibrationPosition = vibrationOptions.find(
+      (option) => option.value === position
+    );
+
+    if (selectedNoisePosition) {
+      setFieldValue("noise", selectedNoisePosition.noiseAvg || "");
+    }
+
+    if (selectedVibrationPosition) {
+      setFieldValue("vibrateX", selectedVibrationPosition.vibrateX || "");
+      setFieldValue("vibrateY", selectedVibrationPosition.vibrateY || "");
+      setFieldValue("vibrateZ", selectedVibrationPosition.vibrateZ || "");
+      setFieldValue("vibrateAvg", selectedVibrationPosition.vibrateAvg || "");
+      setFieldValue("vibrateTwa", selectedVibrationPosition.vibrateTwa || "");
+    }
+  };
+
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await axios.put(`/api/working/${personalId}`, {
@@ -185,41 +206,26 @@ export default function UpdateWorkTab() {
         handleBlur,
         handleSubmit,
         setFieldValue,
+        handleChange,
         isSubmitting,
       }) => {
-        useEffect(() => {
-          const selectedNoisePosition = noiseOptions.find(
-            (option) => option.value === values.position
-          );
-          const selectedVibrationPosition = vibrationOptions.find(
-            (option) => option.value === values.position
-          );
-
-          if (selectedNoisePosition) {
-            setFieldValue("noise", selectedNoisePosition.noiseAvg || "");
-          }
-
-          if (selectedVibrationPosition) {
-            setFieldValue("vibrateX", selectedVibrationPosition.vibrateX || "");
-            setFieldValue("vibrateY", selectedVibrationPosition.vibrateY || "");
-            setFieldValue("vibrateZ", selectedVibrationPosition.vibrateZ || "");
-            setFieldValue(
-              "vibrateAvg",
-              selectedVibrationPosition.vibrateAvg || ""
-            );
-            setFieldValue(
-              "vibrateTwa",
-              selectedVibrationPosition.vibrateTwa || ""
-            );
-          }
-        }, [values.position, setFieldValue]);
+        const handlePositionChange = (event) => {
+          const newPosition = event.target.value;
+          setFieldValue("position", newPosition);
+          updateFormValues(newPosition, setFieldValue);
+        };
 
         return (
           <form onSubmit={handleSubmit}>
             <Stack spacing={4}>
               <FormControl isInvalid={!!errors.position && touched.position}>
                 <FormLabel>ตำแหน่งงาน*</FormLabel>
-                <Field as={Select} name="position" onBlur={handleBlur}>
+                <Field
+                  as={Select}
+                  name="position"
+                  onChange={handlePositionChange}
+                  onBlur={handleBlur}
+                >
                   {noiseOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -281,7 +287,7 @@ export default function UpdateWorkTab() {
                     />
                   </InputGroup>
                   <InputGroup>
-                    <InputLeftAddon>ค่าเฉลี่ยความเร่ง</InputLeftAddon>
+                    <InputLeftAddon>ค่าการสั่นสะเทือนเฉลี่ย</InputLeftAddon>
                     <Field
                       as={Input}
                       type="number"

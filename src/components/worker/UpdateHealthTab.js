@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { Field, Formik } from "formik";
 import { useEffect, useState } from "react";
-import { MdNavigateBefore } from "react-icons/md";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { medicalOptions } from "../register/worker/Option";
