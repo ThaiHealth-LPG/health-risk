@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { supabase } from "../../../../lib/supabase";
+import bcrypt from "bcrypt";
 
 export default NextAuth({
   providers: [
@@ -13,6 +14,7 @@ export default NextAuth({
       async authorize(credentials) {
         const { account, password } = credentials;
 
+        // Fetch user from Supabase
         const { data, error } = await supabase
           .from("account")
           .select("*")
@@ -23,7 +25,7 @@ export default NextAuth({
           throw new Error("No user found with the account");
         }
 
-        const isValidPassword = password === data.password;
+        const isValidPassword = await bcrypt.compare(password, data.password);
 
         if (isValidPassword) {
           const { error: updateError } = await supabase
