@@ -4,7 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { MdNavigateBefore } from "react-icons/md";
 
-export default function occupational() {
+export default function InfOccupationalPage() {
   return (
     <div className="min-h-screen w-full bg-bases">
       <Head>

@@ -116,7 +116,7 @@ export default function WorkingHearingLossChart() {
         }}
       />
       <div className="text-center w-full py-2">
-        ระดับความเสี่ยงระดับกับเสียงดัง
+        ระดับความเสี่ยงการรับสัมผัสเสียงดังกับระดับเสียงดัง
       </div>
     </Box>
   );

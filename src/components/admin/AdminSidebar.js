@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { BiLogOut, BiMenu } from "react-icons/bi";
 import { BsGraphUp, BsList } from "react-icons/bs";
+import { signOut } from "next-auth/react";
 
 export default function AdminSidebar() {
   const router = useRouter();
@@ -11,10 +12,16 @@ export default function AdminSidebar() {
     setSidebarOpen(!isSidebarOpen);
   };
 
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    localStorage.removeItem("token");
+    router.push("/admin/login");
+  };
+
   return (
     <div>
       {/* Mobile Toggle Button */}
-      <div className="md:hidden p-3  absolute">
+      <div className="md:hidden p-3 absolute">
         <button onClick={toggleSidebar} className="text-bases-content">
           <BiMenu size={24} />
         </button>
@@ -26,7 +33,7 @@ export default function AdminSidebar() {
           isSidebarOpen
             ? "transform translate-x-0"
             : "transform -translate-x-full"
-        } md:relative md:transform-none md:translate-x-0`}
+        } md:fixed md:transform-none md:translate-x-0`}
       >
         <div className="w-full flex flex-col gap-5">
           <div>
@@ -63,7 +70,10 @@ export default function AdminSidebar() {
         </div>
 
         <div className="flex flex-col gap-5">
-          <button className="flex flex-row justify-start items-center gap-2 px-2 py-3 focus:bg-success hover:bg-success-light rounded-xl">
+          <button
+            className="flex flex-row justify-start items-center gap-2 px-2 py-3 focus:bg-success hover:bg-success-light rounded-xl"
+            onClick={handleLogout}
+          >
             <BiLogOut />
             <p className="text-start">ออกจากระบบ</p>
           </button>

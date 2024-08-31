@@ -16,6 +16,8 @@ import {
   Select,
 } from "@chakra-ui/react";
 import RiskBadge from "../badges/RiskBadge";
+import { RiFileEditLine } from "react-icons/ri";
+import { useRouter } from "next/router";
 
 export default function WorkerList() {
   const [workers, setWorkers] = useState([]);
@@ -24,6 +26,7 @@ export default function WorkerList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRiskLevel, setSelectedRiskLevel] = useState("");
+  const router = useRouter();
   const workersPerPage = 10;
 
   useEffect(() => {
@@ -56,7 +59,7 @@ export default function WorkerList() {
   };
 
   const matchesRiskLevel = (riskLevel, selectedLevel) => {
-    if (selectedLevel === "") return true; // No filter applied
+    if (selectedLevel === "") return true;
     const ranges = {
       0: [0, 0],
       "0.01-1.99": [0.01, 1.99],
@@ -157,7 +160,7 @@ export default function WorkerList() {
                     <Th>{"ระดับความเสี่ยง (ล่าสุด->ก่อนหน้า)"}</Th>
                     <Th className="hidden">ความเสี่ยงล่าสุด</Th>
                     <Th>ประเมินล่าสุด</Th>
-                    <Th>แก้ไขข้อมูล</Th>
+                    <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -198,8 +201,13 @@ export default function WorkerList() {
                               ).toLocaleDateString()}
                         </Td>
                         <Td>
-                          <button className="text-blue-500 hover:underline">
-                            แก้ไข
+                          <button
+                            className="text-primary hover:text-accent"
+                            onClick={() =>
+                              router.push(`/admin/worker-list/${worker.id}`)
+                            }
+                          >
+                            <RiFileEditLine />
                           </button>
                         </Td>
                       </Tr>
