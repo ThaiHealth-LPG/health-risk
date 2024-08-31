@@ -5,21 +5,30 @@ export default async function handler(req, res) {
     try {
       const { data: workingData, error: workingError } = await supabase
         .from("working")
-        .select("personal_id, noise");
+        .select("*");
 
       if (workingError) throw workingError;
 
       const { data: hearingLossData, error: hearingLossError } = await supabase
         .from("hearingloss")
-        .select("personal_id, risk_level");
+        .select("*")
+        .order("updated_at", { ascending: false });
 
       if (hearingLossError) throw hearingLossError;
 
+      const latestHearingLossMap = hearingLossData.reduce((acc, record) => {
+        if (
+          !acc[record.personal_id] ||
+          record.updated_at > acc[record.personal_id].updated_at
+        ) {
+          acc[record.personal_id] = record;
+        }
+        return acc;
+      }, {});
+
       const combinedData = workingData
         .map((work) => {
-          const hearingLossRecord = hearingLossData.find(
-            (hl) => hl.personal_id === work.personal_id
-          );
+          const hearingLossRecord = latestHearingLossMap[work.personal_id];
           return {
             noise: work.noise,
             risk_level: hearingLossRecord ? hearingLossRecord.risk_level : null,

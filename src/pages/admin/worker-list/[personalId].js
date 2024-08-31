@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import Head from "next/head";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import WorkerList from "@/components/admin/WorkerList";
-import { getToken } from "../../../../lib/tokenManager";
-import { useRouter } from "next/router";
 import Loading from "@/components/loading/Loading";
+import UpdateWorkerForm from "@/components/worker/UpdateWorkerForm";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { getToken } from "../../../../lib/tokenManager";
 
-export default function AdminWorkerListPage() {
+export default function UpdateWorkerPage() {
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setAuthorized] = useState(false);
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function AdminWorkerListPage() {
   return (
     <div className="min-h-screen w-full">
       <Head>
-        <title>รายชื่อผู้ประกอบอาชีพทำครกหิน อ.เมือง จ.ลำปาง</title>
+        <title>แก้ไขผู้ประกอบอาชีพทำครกหิน อ.เมือง จ.ลำปาง</title>
         <meta
           name="description"
           content="Health Risk Assessment Admin dashboard"
@@ -43,8 +43,8 @@ export default function AdminWorkerListPage() {
         {/* sidebar */}
         <AdminSidebar />
 
-        {/* table worker-list */}
-        <WorkerList />
+        {/* update worker form */}
+        <UpdateWorkerForm />
       </div>
     </div>
   );

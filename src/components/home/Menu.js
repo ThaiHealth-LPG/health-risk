@@ -3,6 +3,9 @@ import MenuCard from "./MenuCard";
 import { GrUserWorker } from "react-icons/gr";
 import { TbInfoTriangleFilled } from "react-icons/tb";
 import { PiUserSoundFill } from "react-icons/pi";
+import { useRouter } from "next/router";
+import { Button } from "@chakra-ui/react";
+import { RiAdminLine } from "react-icons/ri";
 
 const MenuData = [
   {
@@ -29,9 +32,22 @@ const MenuData = [
 ];
 
 export default function Menu() {
+  const router = useRouter();
   return (
     <div className="flex flex-col gap-4 pt-2 max-w-[760px] mx-auto">
-      <h2 className="text-2xl font-semibold ml-1">เมนู</h2>
+      <div className="flex flex-row justify-between items-center w-full">
+        <h2 className="text-2xl font-semibold ml-1">เมนู</h2>
+        <Button
+          type="button"
+          onClick={() => router.push("/admin/login")}
+          colorScheme="blue"
+          className="w-fit"
+          fontSize="sm"
+        >
+          <RiAdminLine className="text-medium text-bases mr-1" />
+          สำหรับเจ้าหน้าที่
+        </Button>
+      </div>
       {MenuData.map((menu, index) => (
         <MenuCard
           key={index}

@@ -4,7 +4,7 @@ import RegisterWorkerForm from "@/components/register/worker/RegisterWorkerForm"
 import { MdNavigateBefore } from "react-icons/md";
 import Link from "next/link";
 
-export default function RegisterWorker() {
+export default function RegisterWorkerPage() {
   return (
     <div className="min-h-screen w-full bg-bases">
       <Head>
