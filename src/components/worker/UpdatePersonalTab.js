@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Field, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { nationOptions } from "../register/worker/Option";
 import { MdLocationOn } from "react-icons/md";
@@ -45,43 +45,45 @@ export default function UpdatePersonalTab() {
   today.setDate(today.getDate() - 1);
   const maxDate = today.toISOString().split("T")[0];
 
-  // Fetch personal data when personalId changes
-  const fetchPersonalData = async () => {
+  useEffect(() => {
     if (!personalId) return;
 
-    try {
-      const response = await axios.get(`/api/personal/${personalId}`);
-      const data = response.data || {};
+    const fetchPersonalData = async () => {
+      try {
+        const response = await axios.get(`/api/personal/${personalId}`);
+        const data = response.data || {};
 
-      const updatedValues = {
-        idNumber: data.id_number || "",
-        gender: data.gender || "",
-        firstName: data.first_name || "",
-        lastName: data.last_name || "",
-        phoneNumber: data.phone_number || "",
-        birth: data.birth || "",
-        age: data.age || "",
-        nation: data.nation || "",
-        homeAddress: data.home_address || "",
-        homeLatitude: data.home_latitude || "",
-        homeLongitude: data.home_longitude || "",
-        stayYears: data.stay_years || "",
-        bornAddress: data.born_address || "",
-      };
+        const updatedValues = {
+          idNumber: data.id_number || "",
+          gender: data.gender || "",
+          firstName: data.first_name || "",
+          lastName: data.last_name || "",
+          phoneNumber: data.phone_number || "",
+          birth: data.birth || "",
+          age: data.age || "",
+          nation: data.nation || "",
+          homeAddress: data.home_address || "",
+          homeLatitude: data.home_latitude || "",
+          homeLongitude: data.home_longitude || "",
+          stayYears: data.stay_years || "",
+          bornAddress: data.born_address || "",
+        };
 
-      setInitialValues(updatedValues);
-    } catch (error) {
-      toast({
-        title: "Error fetching data",
-        description: "Unable to load personal data.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+        setInitialValues(updatedValues);
+      } catch (error) {
+        toast({
+          title: "Error fetching data",
+          description: "Unable to load personal data.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    };
 
-  // Calculate age based on birth date
+    fetchPersonalData();
+  }, [personalId, toast]);
+
   const calculateAge = (birthDate) => {
     const today = new Date();
     const age = today.getFullYear() - birthDate.getFullYear();
@@ -94,7 +96,6 @@ export default function UpdatePersonalTab() {
     return age;
   };
 
-  // Update form values with calculated age
   const handleBirthChange = (event, setFieldValue) => {
     const birthDate = new Date(event.target.value);
     const age = calculateAge(birthDate);
@@ -102,7 +103,6 @@ export default function UpdatePersonalTab() {
     setFieldValue("age", age);
   };
 
-  // Handle form submission
   const handleUpdate = async (values) => {
     try {
       await axios.put(`/api/personal/${personalId}`, {
@@ -138,7 +138,6 @@ export default function UpdatePersonalTab() {
     }
   };
 
-  // Handle geolocation button click
   const handleGeolocation = (setFieldValue) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -164,7 +163,6 @@ export default function UpdatePersonalTab() {
     }
   };
 
-  // Validate form fields
   const validateForm = (values) => {
     const errors = {};
 
