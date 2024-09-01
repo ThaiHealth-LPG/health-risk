@@ -224,7 +224,7 @@ export default function WorkerList() {
                         <Td className="text-sm">{worker.age}</Td>
                         <Td className="text-sm flex gap-1">
                           {worker.hearingloss.length === 0 ? (
-                            <span>ไม่พบข้อมูล</span>
+                            <RiskBadge riskLevel={null} />
                           ) : (
                             lastThreeHearingloss.map((record) => (
                               <RiskBadge
@@ -238,16 +238,10 @@ export default function WorkerList() {
                           {worker.hearingloss[0]?.risk_level}
                         </Td>
                         <Td className="text-sm">
-                          {worker.audiometry.length === 0 ? (
-                            <span className="text-sm">ไม่พบข้อมูล</span>
-                          ) : (
-                            <AudiometryBadge
-                              key={index}
-                              audiometry={
-                                worker.audiometry[0]?.audiometry_result
-                              }
-                            />
-                          )}
+                          <AudiometryBadge
+                            key={index}
+                            audiometry={worker.audiometry[0]?.audiometry_result}
+                          />
                         </Td>
                         <Td className="text-sm">
                           {worker.audiometry[0]?.audiometry_type}
