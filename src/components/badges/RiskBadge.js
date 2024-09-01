@@ -1,4 +1,3 @@
-// RiskBadge.js
 import React from "react";
 
 const RiskBadge = ({ riskLevel }) => {
