@@ -13,6 +13,8 @@ export default async function handler(req, res) {
       lastName,
       riskScore,
       riskLevel,
+      riskLatitude,
+      riskLongitude,
     } = req.body;
 
     try {
@@ -42,6 +44,8 @@ export default async function handler(req, res) {
           ear_symptoms: earSymptoms,
           risk_score: riskScore,
           risk_level: riskLevel,
+          risk_latitude: riskLatitude,
+          risk_longitude: riskLongitude,
         },
       ]);
 
