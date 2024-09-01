@@ -52,13 +52,6 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
         setFieldValue("workLatitude", position.coords.latitude);
         setFieldValue("workLongitude", position.coords.longitude);
       });
-      toast({
-        title: "ปักหมุดที่ทำงานสำเร็จ",
-        description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
     } else {
       toast({
         title: "ไม่สามารถปักหมุดที่ทำงาน",
