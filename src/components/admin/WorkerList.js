@@ -200,7 +200,7 @@ export default function WorkerList() {
                     <Th className="text-sm">อายุ</Th>
                     <Th className="text-sm">ระดับความเสี่ยง</Th>
                     <Th className="text-sm hidden">ความเสี่ยงล่าสุด</Th>
-                    <Th className="text-sm">ผลการตรวจวัดการได้ยิน</Th>
+                    <Th className="text-sm">ผลการตรวจสมรรถภาพการได้ยิน</Th>
                     <Th className="text-sm">รายละเอียด</Th>
                     <Th className="text-sm"></Th>
                   </Tr>

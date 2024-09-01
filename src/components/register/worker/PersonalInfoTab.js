@@ -53,14 +53,6 @@ export default function PersonalInfoTab({ nextTab }) {
         setFieldValue("homeLatitude", position.coords.latitude);
         setFieldValue("homeLongitude", position.coords.longitude);
       });
-
-      toast({
-        title: "ปักหมุดที่พักอาศัยสำเร็จ",
-        description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
     } else {
       toast({
         title: "ไม่สามารถปักหมุดที่พักอาศัย",
