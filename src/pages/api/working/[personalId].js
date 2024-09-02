@@ -40,6 +40,7 @@ export default async function handler(req, res) {
     }
   } else if (method === "PUT") {
     const {
+      workStatus,
       position,
       noise,
       vibrateX,
@@ -62,6 +63,7 @@ export default async function handler(req, res) {
         await supabase
           .from("working")
           .update({
+            work_status: workStatus,
             position,
             noise,
             vibrate_x: vibrateX,

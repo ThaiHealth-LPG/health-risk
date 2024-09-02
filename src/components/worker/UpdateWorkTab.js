@@ -157,6 +157,7 @@ export default function UpdateWorkTab() {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await axios.put(`/api/working/${personalId}`, {
+        workStatus: values.workStatus,
         position: values.position,
         noise: values.noise,
         vibrateX: values.vibrateX,
@@ -206,7 +207,6 @@ export default function UpdateWorkTab() {
         handleBlur,
         handleSubmit,
         setFieldValue,
-        handleChange,
         isSubmitting,
       }) => {
         const handlePositionChange = (event) => {
@@ -218,6 +218,16 @@ export default function UpdateWorkTab() {
         return (
           <form onSubmit={handleSubmit}>
             <Stack spacing={4}>
+              <FormControl>
+                <FormLabel>สถานะการทำครกหิน*</FormLabel>
+                <Field as={Select} name="workStatus" onBlur={handleBlur}>
+                  <option value="">เลือกสถานะการทำครกหิน</option>
+                  <option value="ไม่เคยทำครกหิน">ไม่เคยทำครกหิน</option>
+                  <option value="เคยทำครกหิน">เคยทำครกหิน</option>
+                  <option value="ทำครกหินอยู่">ทำครกหินอยู่</option>
+                </Field>
+              </FormControl>
+
               <FormControl isInvalid={!!errors.position && touched.position}>
                 <FormLabel>ตำแหน่งงาน*</FormLabel>
                 <Field
@@ -385,7 +395,6 @@ export default function UpdateWorkTab() {
                     step="any"
                     min="-90"
                     max="90"
-                    readOnly
                   />
                 </FormControl>
 
@@ -399,7 +408,6 @@ export default function UpdateWorkTab() {
                     step="any"
                     min="-180"
                     max="180"
-                    readOnly
                   />
                 </FormControl>
               </div>

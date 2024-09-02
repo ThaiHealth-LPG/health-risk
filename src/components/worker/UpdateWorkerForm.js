@@ -8,8 +8,6 @@ import {
   Tabs,
   useToast,
 } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { MdNavigateBefore } from "react-icons/md";
 import UpdatePersonalTab from "./UpdatePersonalTab";
