@@ -32,6 +32,7 @@ export default function UpdateWorkTab() {
   const { personalId } = router.query;
 
   const [initialValues, setInitialValues] = useState({
+    workStatus: "",
     position: "",
     noise: "",
     vibrateX: "",
@@ -58,6 +59,7 @@ export default function UpdateWorkTab() {
         const data = response.data || {};
 
         setInitialValues({
+          workStatus: data.work_status || "",
           position: data.position || "",
           noise: data.noise || "",
           vibrateX: data.vibrate_x || "",
