@@ -23,7 +23,7 @@ const AudiometryBadge = ({ audiometry }) => {
 
   return (
     <span
-      className={`px-4 py-1 rounded-full font-bold text-sm text-center ${style}`}
+      className={`px-4 py-1 rounded-full font-bold text-xs text-center ${style}`}
     >
       {description}
     </span>

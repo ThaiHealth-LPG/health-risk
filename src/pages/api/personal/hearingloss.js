@@ -4,13 +4,11 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
       const { data, error } = await supabase.from("personal").select(`
-          *,
-          hearingloss (
-            *
-          ), audiometry (
-            *
-          )
-        `);
+        *,
+        hearingloss (*),
+        working (*),
+        audiometry (*)
+      `);
 
       if (error) throw error;
 
