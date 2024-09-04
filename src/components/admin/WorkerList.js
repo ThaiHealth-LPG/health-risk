@@ -19,6 +19,7 @@ import RiskBadge from "../badges/RiskBadge";
 import { RiFileEditLine } from "react-icons/ri";
 import { useRouter } from "next/router";
 import AudiometryBadge from "../badges/AudiometryBadge";
+import WorkStatusBadge from "../badges/WorkStatusBadge";
 
 export default function WorkerList() {
   const [workers, setWorkers] = useState([]);
@@ -28,12 +29,13 @@ export default function WorkerList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRiskLevel, setSelectedRiskLevel] = useState("");
   const [selectedAudiometryResult, setSelectedAudiometryResult] = useState("");
+  const [selectedWorkStatus, setSelectedWorkStatus] = useState("");
   const router = useRouter();
   const workersPerPage = 10;
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedRiskLevel, selectedAudiometryResult]);
+  }, [selectedRiskLevel, selectedAudiometryResult, selectedWorkStatus]);
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -82,6 +84,11 @@ export default function WorkerList() {
     return audiometryResult === selectedResult;
   };
 
+  const matchesWorkStatus = (workStatus, selectedStatus) => {
+    if (selectedStatus === "") return true;
+    return workStatus === selectedStatus;
+  };
+
   const indexOfLastWorker = currentPage * workersPerPage;
   const indexOfFirstWorker = indexOfLastWorker - workersPerPage;
 
@@ -94,6 +101,7 @@ export default function WorkerList() {
     const lastThreeHearingloss = getLastThreeHearingloss(worker.hearingloss);
     const recentRiskLevel = worker.hearingloss[0]?.risk_level;
     const recentAudiometryResult = worker.audiometry[0]?.audiometry_result;
+    const recentWorkStatus = worker.working[0]?.work_status;
 
     const matchesRisk =
       selectedRiskLevel === "" ||
@@ -103,7 +111,11 @@ export default function WorkerList() {
       selectedAudiometryResult === "" ||
       matchesAudiometryResult(recentAudiometryResult, selectedAudiometryResult);
 
-    return matchesSearch && matchesRisk && matchesAudiometry;
+    const matchesStatus =
+      selectedWorkStatus === "" ||
+      matchesWorkStatus(recentWorkStatus, selectedWorkStatus);
+
+    return matchesSearch && matchesRisk && matchesAudiometry && matchesStatus;
   });
 
   const currentWorkers = filteredWorkers.slice(
@@ -132,7 +144,7 @@ export default function WorkerList() {
               จำนวน {filteredWorkers.length} ข้อมูล
             </span>
           </div>
-          <div className="flex gap-4">
+          <div className="grid grid-cols-2 gap-2 m-2">
             <Input
               placeholder="ค้นหาชื่อหรือนามสกุล"
               className="text-sm"
@@ -140,6 +152,22 @@ export default function WorkerList() {
               onChange={(e) => setSearchTerm(e.target.value)}
               size="sm"
             />
+            <Select
+              placeholder="เลือกสถานะการทำครกหิน"
+              value={selectedWorkStatus}
+              onChange={(e) => setSelectedWorkStatus(e.target.value)}
+              size="sm"
+            >
+              <option value="ไม่เคยทำครกหิน" className="text-sm">
+                ไม่เคยทำครกหิน
+              </option>
+              <option value="เคยทำครกหิน" className="text-sm">
+                เคยทำครกหิน
+              </option>
+              <option value="ทำครกหินอยู่" className="text-sm">
+                ทำครกหินอยู่
+              </option>
+            </Select>
             <Select
               placeholder="เลือกระดับความเสี่ยง"
               className="text-sm"
@@ -164,7 +192,7 @@ export default function WorkerList() {
               </option>
             </Select>
             <Select
-              placeholder="เลือกผลการตรวจวัดการได้ยิน"
+              placeholder="เลือกผลการตรวจสมรรภภาพการได้ยิน"
               value={selectedAudiometryResult}
               onChange={(e) => setSelectedAudiometryResult(e.target.value)}
               size="sm"
@@ -194,7 +222,9 @@ export default function WorkerList() {
               <Table variant="simple" size="sm">
                 <Thead>
                   <Tr>
+                    <Th className="text-sm"></Th>
                     <Th className="text-sm">ลำดับ</Th>
+                    <Th className="text-sm">สถานะการทำครกหิน</Th>
                     <Th className="text-sm">ชื่อ นามสกุล</Th>
                     <Th className="text-sm">เพศ</Th>
                     <Th className="text-sm">อายุ</Th>
@@ -202,7 +232,6 @@ export default function WorkerList() {
                     <Th className="text-sm hidden">ความเสี่ยงล่าสุด</Th>
                     <Th className="text-sm">ผลการตรวจสมรรถภาพการได้ยิน</Th>
                     <Th className="text-sm">รายละเอียด</Th>
-                    <Th className="text-sm"></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -214,7 +243,23 @@ export default function WorkerList() {
                     return (
                       <Tr key={worker.id}>
                         <Td className="text-sm">
+                          <button
+                            className="text-primary hover:text-accent"
+                            onClick={() =>
+                              router.push(`/admin/worker-list/${worker.id}`)
+                            }
+                          >
+                            <RiFileEditLine />
+                          </button>
+                        </Td>
+                        <Td className="text-sm">
                           {indexOfFirstWorker + index + 1}
+                        </Td>
+                        <Td className="text-sm">
+                          <WorkStatusBadge
+                            key={index}
+                            workStatus={worker.working[0]?.work_status}
+                          />
                         </Td>
                         <Td className="text-sm flex gap-3">
                           <span className="text-sm">{worker.first_name}</span>
@@ -245,16 +290,6 @@ export default function WorkerList() {
                         </Td>
                         <Td className="text-sm">
                           {worker.audiometry[0]?.audiometry_type}
-                        </Td>
-                        <Td className="text-sm">
-                          <button
-                            className="text-primary hover:text-accent"
-                            onClick={() =>
-                              router.push(`/admin/worker-list/${worker.id}`)
-                            }
-                          >
-                            <RiFileEditLine />
-                          </button>
                         </Td>
                       </Tr>
                     );

@@ -1,5 +1,6 @@
 import Menu from "@/components/home/Menu";
 import Head from "next/head";
+import Image from "next/image";
 
 export default function HomePage() {
   return (
@@ -12,7 +13,7 @@ export default function HomePage() {
         <meta name="description" content="Health Risk Assessment Application" />
       </Head>
 
-      <div className="max-w-[1024px] w-full mx-auto flex flex-col justify-start text-bases-content p-5 gap-3">
+      <div className="max-w-[1024px] w-full mx-auto flex flex-col md:flex-row justify-between text-bases-content p-5 gap-3">
         <div>
           <h1 className="text-2xl">ยินดีต้อนรับ!</h1>
           <h2 className="text-xl">
@@ -20,14 +21,26 @@ export default function HomePage() {
           </h2>
           <h2 className="text-xl">กลุ่มอาชีพทำครกหิน อ.เมือง จ.ลำปาง</h2>
         </div>
-
-        <div>
-          <h2 className="text-xs">
-            จัดทำโดย คณะสาธารณสุขศาสตร์ มหาวิทยาลัยธรรมศาสตร์
-          </h2>
-          <h2 className="text-xs">
-            สนับสนุนโดย สำนักงานกองทุนสนับสนุนการสร้างเสริมสุขภาพ (สสส.)
-          </h2>
+        <div className="bg-bases rounded-2xl py-2 px-4">
+          <span className="flex justify-center text-sm text-center mb-2">
+            จัดทำและสนับสนุนโดย
+          </span>
+          <div className="flex flex-row items-center justify-around">
+            <Image
+              src="/logo/logo-fphtu.png"
+              alt="logo-fphtu"
+              className="h-[80px]"
+              width={100}
+              height={100}
+            />
+            <Image
+              src="/logo/logo-thaihealth.png"
+              alt="logo-thaihealth"
+              className="h-[80px]"
+              width={100}
+              height={100}
+            />
+          </div>
         </div>
       </div>
 
