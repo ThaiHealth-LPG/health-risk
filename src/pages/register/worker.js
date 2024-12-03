@@ -8,8 +8,9 @@ export default function RegisterWorkerPage() {
   return (
     <div className="min-h-screen w-full bg-bases">
       <Head>
-        <title>ลงทะเบียนผู้ประกอบอาชีพทำครกหิน</title>
+        <title>ลงทะเบียนผู้ประกอบอาชีพทำครกหิน จ.ลำปาง</title>
         <meta name="description" content="Register Worker" />
+        <link rel="icon" href="/logo/thaihealth-lpg-logo.svg" />
       </Head>
 
       <nav className="w-full h-12 bg-success-light">

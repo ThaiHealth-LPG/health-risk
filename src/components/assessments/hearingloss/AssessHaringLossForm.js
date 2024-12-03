@@ -63,7 +63,7 @@ export default function AssessHearingLossForm() {
     }
   };
 
-  const handleSaveData = async (values, { resetForm }) => {
+  const handleSaveData = async (values) => {
     setLoading(true);
     try {
       const response = await axios.post("/api/hearingloss", {
@@ -135,7 +135,6 @@ export default function AssessHearingLossForm() {
       onSubmit={handleCalculateRisk}
     >
       {({ resetForm, submitForm, values, setFieldValue }) => {
-        // Move handleGeolocation inside the render props to access setFieldValue
         const handleGeolocation = () => {
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -311,7 +310,7 @@ export default function AssessHearingLossForm() {
                     mr={3}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleSaveData(values, { resetForm });
+                      handleSaveData(values);
                     }}
                     isLoading={loading}
                   >
