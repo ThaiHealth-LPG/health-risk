@@ -14,12 +14,20 @@ import PersonalInfoTab from "./PersonalInfoTab";
 import WorkInfoTab from "./WorkInfoTab";
 import HealthInfoTab from "./HealthInfoTab";
 import { useRouter } from "next/router";
+import { useHearingLossRisk } from "@/context/HearingLossRiskContext";
 
 export default function RegisterWorkerForm() {
   const [tabIndex, setTabIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const router = useRouter();
+
+  const {
+    hearingLossRiskScore,
+    hearingLossRiskLevel,
+    calculateHearingLossRisk,
+    resetHearingLossRisk,
+  } = useHearingLossRisk();
 
   const nextTab = () => {
     setTabIndex((prevIndex) => prevIndex + 1);
@@ -94,6 +102,23 @@ export default function RegisterWorkerForm() {
         }),
       ]);
 
+      calculateHearingLossRisk(values);
+
+      await axios.post("/api/hearingloss", {
+        position: values.position,
+        noise: values.noise,
+        noiseLevel: values.noiseLevel,
+        workingHours: values.workingHours,
+        bodyHeight: values.bodyHeight,
+        earSymptoms: values.earSymptoms,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        riskScore: hearingLossRiskScore,
+        riskLevel: hearingLossRiskLevel,
+        riskLatitude: values.riskLatitude,
+        riskLongitude: values.riskLongitude,
+      });
+
       toast({
         title: "ลงทะเบียนสำเร็จ",
         description: "ระบบได้รับข้อมูลของท่านเรียบร้อย",
@@ -110,7 +135,7 @@ export default function RegisterWorkerForm() {
       if (error.response) {
         if (error.response.status === 409) {
           toast({
-            title: "ระบบมีข้อมูลของท่านอยู่แล้ว",
+            title: "ท่านได้เคยลงทะเบียนในระบบแล้ว",
             description: "กรุณากลับสู่หน้าหลัก เพื่อประเมินความเสี่ยง",
             status: "warning",
             duration: 3000,
@@ -158,6 +183,7 @@ export default function RegisterWorkerForm() {
         bornAddress: "",
         position: "",
         noise: "",
+        noiseLevel: "",
         vibrateX: "",
         vibrateY: "",
         vibrateZ: "",
@@ -219,7 +245,7 @@ export default function RegisterWorkerForm() {
                   type="button"
                   onClick={() => {
                     resetForm();
-                    resetTab();
+                    resetHearingLossRisk();
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   isDisabled={isSubmitting || loading}
