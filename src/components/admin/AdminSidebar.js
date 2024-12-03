@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { BiLogOut, BiMenu } from "react-icons/bi";
 import { BsGraphUp, BsList } from "react-icons/bs";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 
 export default function AdminSidebar() {
   const router = useRouter();
@@ -36,13 +37,22 @@ export default function AdminSidebar() {
         } md:fixed md:transform-none md:translate-x-0`}
       >
         <div className="w-full flex flex-col gap-5">
-          <div>
+          <div className="flex flex-col items-center w-full">
+            <Image
+              src="/logo/thaihealth-lpg-logo.svg"
+              alt="logo-thaihealth"
+              className="w-full flex justify-center p-2"
+              width={400}
+              height={400}
+            />
             <p className="text-xl font-bold text-center">
               ระบบจัดการข้อมูล
               <br />
               กลุ่มอาชีพทำครกหิน
               <br />
-              อ.เมือง จ.ลำปาง
+              บ้านไร่ศิลาทอง
+              <br />
+              ต.พิชัย อ.เมือง จ.ลำปาง
             </p>
           </div>
 

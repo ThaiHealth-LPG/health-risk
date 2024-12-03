@@ -10,7 +10,7 @@ export default function AssessmentHearingLossPage() {
       <Head>
         <title>ประเมินความเสี่ยงการรับสัมผัสเสียงดัง</title>
         <meta name="description" content="Register Worker" />
-        <link rel="icon" href="/logo/thaihealth-lpg-logo.png" />
+        <link rel="icon" href="/logo/thaihealth-lpg-logo.svg" />
       </Head>
 
       <nav className="w-full h-12 bg-success-light">

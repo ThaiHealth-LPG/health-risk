@@ -10,7 +10,7 @@ export default function InfOccupationalPage() {
       <Head>
         <title>ข้อมูลข่าวสาร อาชีวอนามัยและความปลอดภัย</title>
         <meta name="description" content="Info Occupational" />
-        <link rel="icon" href="/logo/thaihealth-lpg-logo.png" />
+        <link rel="icon" href="/logo/thaihealth-lpg-logo.svg" />
       </Head>
 
       <nav className="w-full h-12 bg-success-light">

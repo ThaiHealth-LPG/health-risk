@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { nationOptions } from "./Option";
 import { MdLocationOn, MdNavigateNext } from "react-icons/md";
 
@@ -23,9 +23,24 @@ export default function PersonalInfoTab({ nextTab }) {
     useFormikContext();
   const toast = useToast();
 
+  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+
   const today = new Date();
   today.setDate(today.getDate() - 1);
   const maxDate = today.toISOString().split("T")[0];
+
+  useEffect(() => {
+    if (selectedDay && selectedMonth && selectedYear) {
+      const isoDate = new Date(
+        selectedYear - 543,
+        selectedMonth - 1,
+        selectedDay
+      ).toISOString();
+      setFieldValue("birth", isoDate);
+    }
+  }, [selectedDay, selectedMonth, selectedYear, setFieldValue]);
 
   useEffect(() => {
     if (values.birth) {
@@ -42,7 +57,7 @@ export default function PersonalInfoTab({ nextTab }) {
     const dayDiff = today.getDate() - birthDate.getDate();
 
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      return age - 1;
+      return age - 1 + 543;
     }
     return age;
   };
@@ -160,10 +175,72 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.birth && touched.birth}>
+        <FormLabel>วันเดือนปีเกิด (พ.ศ.)</FormLabel>
+        <div className="flex gap-2">
+          <Select
+            placeholder="วัน"
+            value={selectedDay}
+            onChange={(e) => setSelectedDay(e.target.value)}
+            onBlur={handleBlur}
+          >
+            {Array.from({ length: 31 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </Select>
+          <Select
+            placeholder="เดือน"
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            onBlur={handleBlur}
+          >
+            {[
+              "มกราคม",
+              "กุมภาพันธ์",
+              "มีนาคม",
+              "เมษายน",
+              "พฤษภาคม",
+              "มิถุนายน",
+              "กรกฎาคม",
+              "สิงหาคม",
+              "กันยายน",
+              "ตุลาคม",
+              "พฤศจิกายน",
+              "ธันวาคม",
+            ].map((month, index) => (
+              <option key={index + 1} value={index + 1}>
+                {month}
+              </option>
+            ))}
+          </Select>
+          <Select
+            placeholder="ปี (พ.ศ.)"
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            onBlur={handleBlur}
+          >
+            {Array.from({ length: 100 }, (_, i) => {
+              const buddhistYear = today.getFullYear() + 543 - i;
+              return (
+                <option key={buddhistYear} value={buddhistYear}>
+                  {buddhistYear}
+                </option>
+              );
+            })}
+          </Select>
+        </div>
+        <FormErrorMessage>{errors.birth}</FormErrorMessage>
+      </FormControl>
+
+      <FormControl
+        isInvalid={!!errors.birth && touched.birth}
+        className="hidden"
+      >
         <FormLabel>วันเดือนปีเกิด (ค.ศ.)</FormLabel>
         <Field
           as={Input}
-          type="date"
+          type="text"
           name="birth"
           placeholder="ใส่เฉพาะตัวเลข"
           max={maxDate}

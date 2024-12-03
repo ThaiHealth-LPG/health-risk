@@ -10,7 +10,7 @@ export default function RegisterWorkerPage() {
       <Head>
         <title>ลงทะเบียนผู้ประกอบอาชีพทำครกหิน จ.ลำปาง</title>
         <meta name="description" content="Register Worker" />
-        <link rel="icon" href="/logo/thaihealth-lpg-logo.png" />
+        <link rel="icon" href="/logo/thaihealth-lpg-logo.svg" />
       </Head>
 
       <nav className="w-full h-12 bg-success-light">

@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { MdNavigateBefore } from "react-icons/md";
+import Image from "next/image";
 
 export default function AdminLogin() {
   const [account, setAccount] = useState("");
@@ -51,12 +52,21 @@ export default function AdminLogin() {
         boxShadow="md"
         className="shadow-lg"
       >
+        <Image
+          src="/logo/thaihealth-lpg-logo.svg"
+          alt="logo-thaihealth"
+          className="w-[70%] flex justify-center p-2 mx-auto"
+          width={400}
+          height={400}
+        />
         <h1 className="text-2xl text-center font-bold pb-4">
           เข้าสู่ระบบจัดการข้อมูล
           <br />
-          ผู้ประกอบอาชีพทำครกหิน
+          กลุ่มอาชีพทำครกหิน
           <br />
-          อ.เมือง จ.ลำปาง
+          บ้านไร่ศิลาทอง
+          <br />
+          ต.พิชัย อ.เมือง จ.ลำปาง
         </h1>
         <VStack spacing={4}>
           <FormControl id="account">
