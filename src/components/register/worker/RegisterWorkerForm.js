@@ -15,6 +15,7 @@ import WorkInfoTab from "./WorkInfoTab";
 import HealthInfoTab from "./HealthInfoTab";
 import { useRouter } from "next/router";
 import { useHearingLossRisk } from "@/context/HearingLossRiskContext";
+import Loading from "@/components/loading/Loading";
 
 export default function RegisterWorkerForm() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -167,6 +168,10 @@ export default function RegisterWorkerForm() {
       actions.setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Formik

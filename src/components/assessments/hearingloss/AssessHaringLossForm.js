@@ -26,6 +26,7 @@ import AssessHaringLossResult from "./AssessHaringLossResult";
 import { MdLocationOn, MdNavigateBefore } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
+import Loading from "@/components/loading/Loading";
 
 export default function AssessHearingLossForm() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -114,6 +115,10 @@ export default function AssessHearingLossForm() {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   const resetTab = () => setTabIndex(0);
 
