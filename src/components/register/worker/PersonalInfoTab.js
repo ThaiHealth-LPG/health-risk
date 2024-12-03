@@ -33,34 +33,45 @@ export default function PersonalInfoTab({ nextTab }) {
 
   useEffect(() => {
     if (selectedDay && selectedMonth && selectedYear) {
-      const isoDate = new Date(
-        selectedYear - 543,
-        selectedMonth - 1,
-        selectedDay
-      ).toISOString();
-      setFieldValue("birth", isoDate);
+      const gregorianYear = selectedYear - 543;
+      const birthDate = new Date(gregorianYear, selectedMonth - 1, selectedDay);
+
+      if (!isNaN(birthDate)) {
+        const isoDate = birthDate.toISOString();
+        setFieldValue("birth", isoDate);
+      }
     }
   }, [selectedDay, selectedMonth, selectedYear, setFieldValue]);
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const thisYear = today.getFullYear();
+    const birthYear = birthDate.getFullYear();
+    const age = thisYear - birthYear;
+
+    const thisMonth = today.getMonth();
+    const birthMonth = birthDate.getMonth();
+    const thisDay = today.getDate();
+    const birthDay = birthDate.getDate();
+
+    if (
+      thisMonth < birthMonth ||
+      (thisMonth === birthMonth && thisDay < birthDay)
+    ) {
+      return age;
+    }
+    return age;
+  };
 
   useEffect(() => {
     if (values.birth) {
       const birthDate = new Date(values.birth);
-      const age = calculateAge(birthDate);
-      setFieldValue("age", age);
+      if (!isNaN(birthDate)) {
+        const age = calculateAge(birthDate);
+        setFieldValue("age", age);
+      }
     }
   }, [values.birth, setFieldValue]);
-
-  const calculateAge = (birthDate) => {
-    const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    const dayDiff = today.getDate() - birthDate.getDate();
-
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      return age - 1 + 543;
-    }
-    return age;
-  };
 
   const handleGeolocation = () => {
     if (navigator.geolocation) {

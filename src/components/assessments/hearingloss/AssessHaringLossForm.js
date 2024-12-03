@@ -73,8 +73,8 @@ export default function AssessHearingLossForm() {
         workingHours: values.workingHours,
         bodyHeight: values.bodyHeight,
         earSymptoms: values.earSymptoms,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
         riskScore: hearingLossRiskScore,
         riskLevel: hearingLossRiskLevel,
         riskLatitude: values.riskLatitude,
@@ -94,7 +94,6 @@ export default function AssessHearingLossForm() {
         duration: 3000,
         isClosable: true,
       });
-      resetForm();
       onClose();
       setNameNotFound(false);
       window.scrollTo({ top: 0, behavior: "smooth" });

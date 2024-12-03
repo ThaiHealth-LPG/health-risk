@@ -50,8 +50,8 @@ export default function RegisterWorkerForm() {
       const { data: personalData } = await axios.post("/api/personal", {
         idNumber: values.idNumber,
         gender: values.gender,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
         phoneNumber: values.phoneNumber,
         birth: values.birth,
         age: values.age,
@@ -126,7 +126,6 @@ export default function RegisterWorkerForm() {
         duration: 3000,
         isClosable: true,
       });
-
       actions.resetForm();
       setTimeout(() => {
         router.push("/");
@@ -136,11 +135,15 @@ export default function RegisterWorkerForm() {
         if (error.response.status === 409) {
           toast({
             title: "ท่านได้เคยลงทะเบียนในระบบแล้ว",
-            description: "กรุณากลับสู่หน้าหลัก เพื่อประเมินความเสี่ยง",
+            description: "ระบบจะนำท่านกลับสู่หน้าหลัก เพื่อประเมินความเสี่ยง",
             status: "warning",
             duration: 3000,
             isClosable: true,
           });
+          actions.resetForm();
+          setTimeout(() => {
+            router.push("/");
+          }, 3000);
         } else if (error.response.status >= 400) {
           toast({
             title: "ข้อมูลไม่ครบถ้วน",
