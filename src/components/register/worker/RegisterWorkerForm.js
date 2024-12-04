@@ -105,10 +105,19 @@ export default function RegisterWorkerForm() {
 
       calculateHearingLossRisk(values);
 
+      await new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if (hearingLossRiskScore !== null && hearingLossRiskLevel !== null) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 100);
+      });
+
       await axios.post("/api/hearingloss", {
         position: values.position,
         noise: values.noise,
-        noiseLevel: values.noiseLevel,
+        noiseLevel: "เฉลี่ย",
         workingHours: values.workingHours,
         bodyHeight: values.bodyHeight,
         earSymptoms: values.earSymptoms,
@@ -116,8 +125,8 @@ export default function RegisterWorkerForm() {
         lastName: values.lastName,
         riskScore: hearingLossRiskScore,
         riskLevel: hearingLossRiskLevel,
-        riskLatitude: values.riskLatitude,
-        riskLongitude: values.riskLongitude,
+        riskLatitude: values.workLatitude,
+        riskLongitude: values.workLongitude,
       });
 
       toast({
@@ -212,6 +221,10 @@ export default function RegisterWorkerForm() {
         disease: "",
         earSymptoms: "",
         earSymptomsDetails: "",
+        riskScore: "",
+        riskLevel: "",
+        riskLatitude: "",
+        riskLongitude: "",
       }}
       onSubmit={(values, actions) => handleSubmit(values, actions, resetTab)}
     >

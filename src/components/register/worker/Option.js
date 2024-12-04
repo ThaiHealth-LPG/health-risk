@@ -47,13 +47,6 @@ export const noiseOptions = [
     noiseMin: 64,
     noiseMax: 102,
   },
-  {
-    value: "อื่น ๆ",
-    label: "อื่น ๆ",
-    noiseAvg: "",
-    noiseMin: "",
-    noiseMax: "",
-  },
 ];
 
 export const vibrationOptions = [
