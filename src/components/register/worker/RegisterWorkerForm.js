@@ -103,31 +103,31 @@ export default function RegisterWorkerForm() {
         }),
       ]);
 
-      calculateHearingLossRisk(values);
+      // calculateHearingLossRisk(values);
 
-      await new Promise((resolve) => {
-        const interval = setInterval(() => {
-          if (hearingLossRiskScore !== null && hearingLossRiskLevel !== null) {
-            clearInterval(interval);
-            resolve();
-          }
-        }, 100);
-      });
+      // // await new Promise((resolve) => {
+      // //   const interval = setInterval(() => {
+      // //     if (hearingLossRiskScore !== null && hearingLossRiskLevel !== null) {
+      // //       clearInterval(interval);
+      // //       resolve();
+      // //     }
+      // //   }, 100);
+      // // });
 
-      await axios.post("/api/hearingloss", {
-        position: values.position,
-        noise: values.noise,
-        noiseLevel: "เฉลี่ย",
-        workingHours: values.workingHours,
-        bodyHeight: values.bodyHeight,
-        earSymptoms: values.earSymptoms,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        riskScore: hearingLossRiskScore,
-        riskLevel: hearingLossRiskLevel,
-        riskLatitude: values.workLatitude,
-        riskLongitude: values.workLongitude,
-      });
+      // await axios.post("/api/hearingloss", {
+      //   position: values.position,
+      //   noise: values.noise,
+      //   noiseLevel: "เฉลี่ย",
+      //   workingHours: values.workingHours,
+      //   bodyHeight: values.bodyHeight,
+      //   earSymptoms: values.earSymptoms,
+      //   firstName: values.firstName,
+      //   lastName: values.lastName,
+      //   riskScore: hearingLossRiskScore,
+      //   riskLevel: hearingLossRiskLevel,
+      //   riskLatitude: values.workLatitude,
+      //   riskLongitude: values.workLongitude,
+      // });
 
       toast({
         title: "ลงทะเบียนสำเร็จ",
