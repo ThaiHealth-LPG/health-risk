@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { ChakraProvider } from "@chakra-ui/react";
-import { HearingLossRiskProvider } from "@/context/HearingLossRiskContext";
+import { HearingLossRiskProvider } from "@/context/lpg/HearingLossRiskContext";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import * as gtag from "../../lib/gtag";
