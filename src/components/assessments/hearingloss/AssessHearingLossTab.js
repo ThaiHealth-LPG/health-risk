@@ -10,11 +10,14 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { noiseOptions } from "../../register/worker/Option";
 import { MdNavigateNext } from "react-icons/md";
+import { LanguageContext } from "@/context/LanguageContext";
 
 export default function AssessHearingLossTab({ submitForm }) {
+  const { t } = useContext(LanguageContext);
+
   const { values, setFieldValue, errors, touched, handleBlur } =
     useFormikContext();
 
@@ -53,21 +56,21 @@ export default function AssessHearingLossTab({ submitForm }) {
   return (
     <Stack spacing={4}>
       <FormControl isInvalid={!!errors.position && touched.position}>
-        <FormLabel>ตำแหน่งงาน*</FormLabel>
+        <FormLabel>{t.position}*</FormLabel>
         <Field
           as={Select}
           name="position"
           validate={(value) => {
             let error;
             if (!value) {
-              error = "กรุณาเลือกตำแหน่งงาน";
+              error = t.error.position;
             }
             return error;
           }}
         >
           {noiseOptions.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {t.positionOptions[option.value] ||option.label}
             </option>
           ))}
         </Field>
@@ -76,14 +79,14 @@ export default function AssessHearingLossTab({ submitForm }) {
 
       <FormControl isInvalid={!!errors.noise && touched.noise}>
         <div className="flex flex-row items-center justify-between mb-1">
-          <FormLabel>ระดับเสียง*</FormLabel>
+          <FormLabel>{t.soundLevel.title}*</FormLabel>
           {values.position !== "อื่น ๆ" && (
             <div>
               <FormControl>
                 <Field as={Select} name="noiseLevel">
-                  <option value="ต่ำสุด">ต่ำสุด</option>
-                  <option value="เฉลี่ย">เฉลี่ย</option>
-                  <option value="สูงสุด">สูงสุด</option>
+                  <option value="ต่ำสุด">{t.soundLevel.low}</option>
+                  <option value="เฉลี่ย">{t.soundLevel.avg}</option>
+                  <option value="สูงสุด">{t.soundLevel.high}</option>
                 </Field>
               </FormControl>
             </div>
@@ -94,87 +97,87 @@ export default function AssessHearingLossTab({ submitForm }) {
             as={Input}
             type="number"
             name="noise"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={0}
             step={0.01}
             validate={(value) => {
               let error;
               if (!value) {
-                error = "กรุณาใส่ข้อมูลระดับความดันเสียง";
+                error = t.error.soundLevel1;
               } else if (value < 0) {
-                error = "ข้อมูลระดับความดันเสียงต้องไม่ต่ำกว่า 0 db(A)";
+                error = t.error.soundLevel2;
               }
               return error;
             }}
           />
-          <InputRightAddon>dB(A)</InputRightAddon>
+          <InputRightAddon>{t.dbA}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.noise}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.workingHours && touched.workingHours}>
-        <FormLabel>ชั่วโมงการทำงานต่อวัน*</FormLabel>
+        <FormLabel>{t.workingHours.title}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="workingHours"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={1}
             max={24}
             step={1}
             validate={(value) => {
               let error;
               if (value === 0) {
-                error = "ข้อมูลชั่วโมงการทำงานต่อวันต้องไม่ต่ำกว่า 1 ชั่วโมง";
+                error = t.error.workingHours1;
               } else if (!value) {
-                error = "กรุณาใส่ข้อมูลชั่วโมงการทำงานต่อวัน";
+                error = t.error.workingHours2;
               } else if (value < 1) {
-                error = "ข้อมูลชั่วโมงการทำงานต่อวันต้องไม่ต่ำกว่า 1 ชั่วโมง";
+                error = t.error.workingHours1;
               } else if (value > 24) {
-                error = "ข้อมูลชั่วโมงการทำงานต่อวันต้องไม่เกินกว่า 24 ชั่วโมง";
+                error = t.error.workingHours3;
               }
               return error;
             }}
           />
-          <InputRightAddon>ชั่วโมง</InputRightAddon>
+          <InputRightAddon>{t.workingHours.hour}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.workingHours}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.bodyHeight && touched.bodyHeight}>
-        <FormLabel>ส่วนสูงร่างกาย*</FormLabel>
+        <FormLabel>{t.bodyHeight.title}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="bodyHeight"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={50}
             step={1}
             validate={(value) => {
               let error;
               if (value === 0) {
-                error = "ข้อมูลส่วนสูงร่างกายต้องไม่ต่ำกว่า 1 เซนติเมตร";
+                error = t.error.bodyHeight1;
               } else if (!value) {
-                error = "กรุณาใส่ข้อมูลส่วนสูงร่างกาย";
+                error = t.error.bodyHeight2;
               } else if (value < 1) {
-                error = "ข้อมูลส่วนสูงร่างกายต้องไม่ต่ำกว่า 1 เซนติเมตร";
+                error = t.error.bodyHeight1;
               }
               return error;
             }}
           />
-          <InputRightAddon>เซนติเมตร</InputRightAddon>
+          <InputRightAddon>{t.bodyHeight.cm}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.bodyHeight}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
-        <FormLabel>อาการผิดปกติเกี่ยวกับหู*</FormLabel>
+        <FormLabel>{t.earSymptoms.title}*</FormLabel>
         <Field as={Select} name="earSymptoms">
-          <option value="">เลือกอาการผิดปกติเกี่ยวกับหู</option>
-          <option value="ไม่มีอาการ">ไม่มีอาการ</option>
-          <option value="มีอาการ">มีอาการ</option>
+          <option value="">{t.earSymptoms.title}</option>
+          <option value="ไม่มีอาการ">{t.earSymptoms.no}</option>
+          <option value="มีอาการ">{t.earSymptoms.yes}</option>
         </Field>
       </FormControl>
 
@@ -185,7 +188,7 @@ export default function AssessHearingLossTab({ submitForm }) {
         className="w-full disabled:text-black"
         isDisabled={!isFormValid()}
       >
-        ประเมินความเสี่ยง
+        {t.assessmentBtn}
         <MdNavigateNext className="text-4xl text-bases" />
       </Button>
     </Stack>

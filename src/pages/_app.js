@@ -5,7 +5,7 @@ import { HearingLossRiskProvider } from "@/context/HearingLossRiskContext";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import * as gtag from "../../lib/gtag";
-
+import { LanguageProvider } from "@/context/LanguageContext";
 import "@/styles/globals.css";
 
 export default function App({ Component, pageProps }) {
@@ -23,13 +23,15 @@ export default function App({ Component, pageProps }) {
 
   return (
     <ChakraProvider>
-      <HearingLossRiskProvider>
-        <main>
-          <Component {...pageProps} />
-          <Analytics />
-          <SpeedInsights />
-        </main>
-      </HearingLossRiskProvider>
+      <LanguageProvider>
+        <HearingLossRiskProvider>
+          <main>
+            <Component {...pageProps} />
+            <Analytics />
+            <SpeedInsights />
+          </main>
+        </HearingLossRiskProvider>
+      </LanguageProvider>
     </ChakraProvider>
   );
 }
