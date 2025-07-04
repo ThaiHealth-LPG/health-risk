@@ -3,14 +3,12 @@ import Head from "next/head";
 import Image from "next/image";
 import { useContext } from "react";
 import { LanguageContext } from "@/context/LanguageContext";
-import LanguageSwitcher from "@/components/button/LangaugeSwitcher";
 
 export default function HomePage() {
   const { t } = useContext(LanguageContext);
 
   return (
     <div className="min-h-screen w-full bg-success-light flex flex-col justify-between">
-      <LanguageSwitcher/>
       <Head>
         <title>{t.header}</title>
         <meta name="description" content="Health Risk Assessment Application" />

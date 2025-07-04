@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { TextIndex } from "@/utils/langauges/indexUtils";
 import { TextsMenu } from "@/utils/langauges/components/menuUtils";
+import { TextsAssessmentHearingLossPage } from "@/utils/langauges/assessmentHearingLossUtils";
 
 // ฟังก์ชันช่วยจำภาษาด้วย localStorage
 const getLang = () => localStorage.getItem("lang") || "th";
@@ -25,12 +26,14 @@ export const LanguageProvider = ({ children }) => {
   const combinedText = {
     th:{
         ...TextIndex.th,
-        ...TextsMenu.th
+        ...TextsMenu.th,
+        ...TextsAssessmentHearingLossPage.th,
         
     },
     en: {
         ...TextIndex.en,
-        ...TextsMenu.en
+        ...TextsMenu.en,
+        ...TextsAssessmentHearingLossPage.en,
     }
   };
 

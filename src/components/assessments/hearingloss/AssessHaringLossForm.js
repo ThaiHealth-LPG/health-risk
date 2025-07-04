@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Button,
   TabPanel,
@@ -27,12 +27,14 @@ import { MdLocationOn, MdNavigateBefore } from "react-icons/md";
 import Link from "next/link";
 import axios from "axios";
 import Loading from "@/components/loading/Loading";
+import { LanguageContext } from "@/context/LanguageContext";
 
 export default function AssessHearingLossForm() {
   const [tabIndex, setTabIndex] = useState(0);
   const [nameNotFound, setNameNotFound] = useState(false);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const { t } = useContext(LanguageContext);
 
   const {
     hearingLossRiskScore,
@@ -173,7 +175,7 @@ export default function AssessHearingLossForm() {
                     }}
                     className="w-full mt-4"
                   >
-                    ล้างข้อมูล
+                    {t.clearData}
                   </Button>
                 </TabPanel>
 
@@ -191,7 +193,7 @@ export default function AssessHearingLossForm() {
                       className="w-full"
                     >
                       <MdNavigateBefore className="text-4xl text-back" />
-                      ประเมินอีกครั้ง
+                      {t.assessmentAgain}
                     </Button>
                     <Button
                       type="button"
@@ -199,7 +201,7 @@ export default function AssessHearingLossForm() {
                       className="w-full"
                       onClick={onOpen}
                     >
-                      บันทึกข้อมูล
+                      {t.saveData}
                     </Button>
                   </div>
                   <Link href="/">
@@ -213,7 +215,7 @@ export default function AssessHearingLossForm() {
                         resetHearingLossRisk();
                       }}
                     >
-                      กลับสู่หน้าหลัก
+                      {t.backBtn}
                     </Button>
                   </Link>
                 </TabPanel>
@@ -233,26 +235,26 @@ export default function AssessHearingLossForm() {
             >
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>ข้อมูลผู้ได้รับการประเมิน</ModalHeader>
+                <ModalHeader>{t.infoData}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Stack spacing={4}>
                     <FormControl>
-                      <FormLabel>ชื่อ*</FormLabel>
+                      <FormLabel>{t.fname}*</FormLabel>
                       <Field
                         as={Input}
                         type="text"
                         name="firstName"
-                        placeholder="ชื่อ"
+                        placeholder={t.fname}
                       />
                     </FormControl>
                     <FormControl>
-                      <FormLabel>นามสกุล*</FormLabel>
+                      <FormLabel>{t.lname}*</FormLabel>
                       <Field
                         as={Input}
                         type="text"
                         name="lastName"
-                        placeholder="นามสกุล"
+                        placeholder={t.lname}
                       />
                     </FormControl>
                     <div className="flex gap-2">
@@ -287,15 +289,15 @@ export default function AssessHearingLossForm() {
 
                     <Button onClick={handleGeolocation} colorScheme="teal">
                       <MdLocationOn />
-                      ปักหมุดสถานที่ประเมิน
+                      {t.pinLocation}
                     </Button>
                     {nameNotFound && (
                       <p style={{ color: "red" }}>
-                        ไม่พบชื่อนามสกุลในระบบ
+                        {t.error.title1}
                         <br />
-                        กรุณาตรวจสอบชื่อนามสกุลอีกครั้ง
+                        {t.error.title2}
                         <br />
-                        หรือกดลงทะเบียนผู้ประกอบอาชีพทำครกหิน
+                        {t.error.title3}
                       </p>
                     )}
                   </Stack>
@@ -304,7 +306,7 @@ export default function AssessHearingLossForm() {
                   {nameNotFound && (
                     <Link href="/register/worker">
                       <Button colorScheme="blue" mr={3} isLoading={loading}>
-                        ลงทะเบียน
+                        {t.register}
                       </Button>
                     </Link>
                   )}
@@ -318,7 +320,7 @@ export default function AssessHearingLossForm() {
                     }}
                     isLoading={loading}
                   >
-                    บันทึกข้อมูล
+                    {t.saveData}
                   </Button>
                   <Button
                     variant="ghost"
@@ -329,7 +331,7 @@ export default function AssessHearingLossForm() {
                       onClose();
                     }}
                   >
-                    ยกเลิก
+                    {t.cancelBtn}
                   </Button>
                 </ModalFooter>
               </ModalContent>
