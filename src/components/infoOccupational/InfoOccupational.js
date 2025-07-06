@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   Box,
   VStack,
@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import { infoList } from "./infoList";
+import { LanguageContext } from "@/context/LanguageContext";
 
 const InfoOccupational = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -24,6 +25,7 @@ const InfoOccupational = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const listRef = useRef(null);
   const itemRefs = useRef([]);
+  const { lang } = useContext(LanguageContext); // ✅ ใช้ภาษา
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,15 +56,11 @@ const InfoOccupational = () => {
   };
 
   const scrollUp = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({ top: -100, behavior: "smooth" });
-    }
+    listRef.current?.scrollBy({ top: -100, behavior: "smooth" });
   };
 
   const scrollDown = () => {
-    if (listRef.current) {
-      listRef.current.scrollBy({ top: 100, behavior: "smooth" });
-    }
+    listRef.current?.scrollBy({ top: 100, behavior: "smooth" });
   };
 
   return (
@@ -78,20 +76,25 @@ const InfoOccupational = () => {
             className="w-full p-4 border border-gray-300 rounded-lg shadow-md cursor-pointer hover:bg-gray-200 transition-all"
             onClick={() => handleClick(item, index)}
           >
-            <h1 className="mb-2 text-xl font-semibold">{item.title}</h1>
+            <h1 className="mb-2 text-xl font-semibold">
+              {typeof item.title === "object"
+                ? item.title[lang] || item.title.th // fallback
+                : item.title}
+            </h1>
+
             {item.type === "Video" ? (
               <Image
                 src={`https://img.youtube.com/vi/${
                   item.link.split("v=")[1]
                 }/0.jpg`}
-                alt={item.title}
+                alt={item.title[lang] || item.title.th}
                 className="w-full h-auto max-h-96 object-cover mb-2"
                 cursor="pointer"
               />
             ) : item.type === "Image" ? (
               <Image
                 src={item.link}
-                alt={item.title}
+                alt={item.title[lang] || item.title.th}
                 className="w-full h-auto max-h-96 object-cover mb-2"
                 cursor="pointer"
               />
@@ -107,7 +110,7 @@ const InfoOccupational = () => {
           </Box>
         ))}
 
-        {/* Scroll-up and Scroll-down Icons */}
+        {/* Scroll Buttons */}
         {showScrollUp && (
           <IconButton
             aria-label="Scroll up"
@@ -134,11 +137,15 @@ const InfoOccupational = () => {
         )}
       </Box>
 
-      {/* Modal for Content */}
+      {/* Modal */}
       <Modal isOpen={isOpen} onClose={onClose} size="full">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{selectedItem?.title}</ModalHeader>
+          <ModalHeader>
+            {typeof selectedItem?.title === "object"
+              ? selectedItem.title[lang] || selectedItem.title.th
+              : selectedItem?.title}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {selectedItem?.type === "Video" && (
@@ -148,7 +155,11 @@ const InfoOccupational = () => {
                 src={`https://www.youtube.com/embed/${
                   selectedItem.link.split("v=")[1]
                 }`}
-                title={selectedItem.title}
+                title={
+                  typeof selectedItem.title === "object"
+                    ? selectedItem.title[lang] || selectedItem.title.th
+                    : selectedItem.title
+                }
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-[70vh]"
@@ -159,14 +170,18 @@ const InfoOccupational = () => {
                 src={selectedItem.link}
                 width="100%"
                 height="600px"
-                title={selectedItem.title}
+                title="PDF Preview"
                 className="w-full h-[70vh]"
               ></iframe>
             )}
             {selectedItem?.type === "Image" && (
               <Image
                 src={selectedItem.link}
-                alt={selectedItem.title}
+                alt={
+                  typeof selectedItem.title === "object"
+                    ? selectedItem.title[lang] || selectedItem.title.th
+                    : selectedItem.title
+                }
                 className="w-full h-auto"
               />
             )}

@@ -5,6 +5,8 @@ export const TextsAssessmentHearingLossPage = {
   th: {
     headerHl: "ประเมินความเสี่ยงการรับสัมผัสเสียงดัง",
     backBtn: "กลับสู่หน้าหลัก",
+    back: "ย้อนกลับ",
+    next: "ถัดไป",
     clearData: "ล้างข้อมูล",
     assessmentAgain: "ประเมินอีกครั้ง",
     saveData: "บันทึกข้อมูล",
@@ -43,7 +45,15 @@ export const TextsAssessmentHearingLossPage = {
       high: "สูงสุด",
     },
     placeholder: {
+      textOnly: "ใส่เฉพาะข้อความ",
       soundLevel: "ใส่เฉพาะตัวเลข",
+      phone: "ใส่เฉพาะตัวเลข เช่น 0801234567",
+      earSymptoms: "เลือกอาการผิดปกติเกี่ยวกับหู",
+      workExperience: "ใส่เฉพาะตัวเลข (ถ้าไม่ถึงปีให้ใส่ 1 ปี)",
+      dob:{dayUnit:"วัน",monthUnit:"เดือน",yearUnit:"ปี (พ.ศ.)"},
+      address: "ใส่บ้านเลขที่ หมู่ที่ ตำบล ของที่พักอาศัย",
+      bornAddress: "ใส่ที่อยู่หรือจังหวัดภูมิลำเนาเดิม",
+      workAddress: "ใส่ชื่อ บ้านเลขที่ หมู่ที่ ตำบล ของสถานที่ทำงาน"
     },
     dbA: "db(A)",
     workingHours: { title: "ชั่วโมงการทำงานต่อวัน", hour: "ชั่วโมง" },
@@ -58,6 +68,8 @@ export const TextsAssessmentHearingLossPage = {
   en: {
     headerHl: "Hearing Loss Assessment",
     backBtn: "Back to Main",
+    back: "Back",
+    next: "Next",
     clearData: "Clear Data",
     assessmentAgain: "Assessment Again",
     saveData: "Save Data",
@@ -96,7 +108,15 @@ export const TextsAssessmentHearingLossPage = {
       high: "Highest",
     },
     placeholder: {
+      textOnly: "Only text",
       soundLevel: "Only numbers",
+      phone: "Only numbers ex. 0801234567",
+      earSymptoms: "Select ear symptoms",
+      workExperience: "Only numbers (if less than a year, enter 1 year)",
+      dob:{dayUnit:"day",monthUnit:"month",yearUnit:"year"},
+      address: "Enter the house number, village number, sub-district of the residence.",
+      bornAddress: "Enter your original address or province of residence.",
+      workAddress: "Enter the house number, village number, sub-district of the workplace."
     },
     dbA: "db(A)",
     workingHours: { title: "Woriking Hours per Day", hour: "Hour(s)" },

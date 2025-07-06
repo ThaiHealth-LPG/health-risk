@@ -2,6 +2,10 @@ import { createContext, useState, useEffect } from "react";
 import { TextIndex } from "@/utils/langauges/indexUtils";
 import { TextsMenu } from "@/utils/langauges/components/menuUtils";
 import { TextsAssessmentHearingLossPage } from "@/utils/langauges/assessmentHearingLossUtils";
+import { TextWorkerPage } from "@/utils/langauges/register/workerUtils";
+import { TextHealthInfoTab } from "@/utils/langauges/register/HealthUtils";
+import { TextInfoOccupational } from "@/utils/langauges/infoUtils";
+import { infoList } from "@/components/infoOccupational/infoList";
 
 // ฟังก์ชันช่วยจำภาษาด้วย localStorage
 const getLang = () => localStorage.getItem("lang") || "th";
@@ -28,12 +32,19 @@ export const LanguageProvider = ({ children }) => {
         ...TextIndex.th,
         ...TextsMenu.th,
         ...TextsAssessmentHearingLossPage.th,
-        
+        ...TextWorkerPage.th,
+        ...TextHealthInfoTab.th,
+        ...TextInfoOccupational.th,
+        ...infoList.th
     },
     en: {
         ...TextIndex.en,
         ...TextsMenu.en,
         ...TextsAssessmentHearingLossPage.en,
+        ...TextWorkerPage.en,
+        ...TextHealthInfoTab.en,
+        ...TextInfoOccupational.en,
+        ...infoList.en
     }
   };
 

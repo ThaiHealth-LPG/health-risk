@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   Tab,
@@ -16,12 +16,14 @@ import HealthInfoTab from "./HealthInfoTab";
 import { useRouter } from "next/router";
 import { useHearingLossRisk } from "@/context/HearingLossRiskContext";
 import Loading from "@/components/loading/Loading";
+import { LanguageContext } from "@/context/LanguageContext";
 
 export default function RegisterWorkerForm() {
   const [tabIndex, setTabIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const router = useRouter();
+  const { t } = useContext(LanguageContext);
 
   const {
     hearingLossRiskScore,
@@ -232,9 +234,9 @@ export default function RegisterWorkerForm() {
         <Form>
           <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)}>
             <TabList>
-              <Tab>ข้อมูลส่วนบุคคล</Tab>
-              <Tab>ข้อมูลการทำงาน</Tab>
-              <Tab>ข้อมูลสุขภาพ</Tab>
+              <Tab>{t.personalInfo}</Tab>
+              <Tab>{t.workingInfo}</Tab>
+              <Tab>{t.healthInfo}</Tab>
             </TabList>
 
             <TabPanels>
@@ -272,7 +274,7 @@ export default function RegisterWorkerForm() {
                   isDisabled={isSubmitting || loading}
                   className="w-full mt-4"
                 >
-                  ล้างข้อมูล
+                  {t.clearData}
                 </Button>
               </TabPanel>
             </TabPanels>

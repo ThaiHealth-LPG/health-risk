@@ -1,37 +1,49 @@
 export const infoList = [
   {
-    title: "รู้จักโรคประสาทหูเสื่อมจากการทำงาน",
+    title: {th:"รู้จักโรคประสาทหูเสื่อมจากการทำงาน",
+      en: "Understanding Occupational Hearing Loss",
+    },
     link: "/images/info/info-hearingloss-1.jpg",
     type: "Image",
     ref: "https://www.facebook.com/strongworkers/photos/a.2321619421455504/2387637304853715/?type=3&locale=pl_PL",
   },
   {
-    title: "รู้จักอันตรายจากเสียงดัง",
+    title: {th:"รู้จักอันตรายจากเสียงดัง",
+      en: "Understanding Noise",
+    },
     link: "/images/info/info-hearingloss-3.jpg",
     type: "Image",
     ref: "https://www.tosh.or.th/index.php/media-relations/poster/item/415-noise",
   },
   {
-    title: "การควบคุมป้องกันอันตรายจากเสียงดัง",
+    title: {th:"การควบคุมป้องกันอันตรายจากเสียงดัง",
+      en: "How to Control Noise",
+    },
     link: "/images/info/info-hearingloss-2.jpg",
     type: "Image",
     ref: "https://www.tosh.or.th/index.php/media-relations/poster/item/415-noise",
   },
   {
     title:
-      "แนวทางการเฝ้าระวังการ ป้องกัน ภาวะสูญเสียการได้ยิน จากเสียงดัง จากการประกอบอาชีพ",
+      {th:"แนวทางการเฝ้าระวังการ ป้องกัน ภาวะสูญเสียการได้ยิน จากเสียงดัง จากการประกอบอาชีพ",
+        en:"Guidelines for monitoring and prevention of hearing loss from loud noise from occupations"
+      },
     link: "https://ddc.moph.go.th/uploads/publish/1030820200713105552.pdf",
     type: "PDF",
     ref: "https://ddc.moph.go.th/uploads/publish/1030820200713105552.pdf",
   },
   {
-    title: "คลิป ประสาทหูเสื่อม เหตุจากการทำงาน ป้องกันได้อย่างไร",
+    title: {th:"คลิป ประสาทหูเสื่อม เหตุจากการทำงาน ป้องกันได้อย่างไร",
+      en:"Video Hearing Loss from Work"
+    },
     link: "https://www.youtube.com/watch?v=2ek3A9SukJ0",
     type: "Video",
     ref: "https://www.youtube.com/watch?v=2ek3A9SukJ0",
   },
   {
-    title: "คลิป อันตรายจากเสียงดัง และผลกระทบต่อการได้ยิน",
+    title: {th:"คลิป อันตรายจากเสียงดัง และผลกระทบต่อการได้ยิน",
+      en:"Video Noise and Impact on Hearing"
+    },
     link: "https://www.youtube.com/watch?v=zlPX5eazfnM",
     type: "Video",
     ref: "https://www.youtube.com/watch?v=zlPX5eazfnM",
