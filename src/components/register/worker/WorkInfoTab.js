@@ -15,15 +15,17 @@ import {
   InputLeftAddon,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { noiseOptions, vibrationOptions, workOptions } from "./Option";
 import { MdNavigateBefore, MdNavigateNext, MdLocationOn } from "react-icons/md";
+import { LanguageContext } from "@/context/LanguageContext";
 
 export default function WorkInfoTab({ nextTab, prevTab }) {
   const { values, setFieldValue, errors, touched, handleBlur } =
     useFormikContext();
   const [disableOtherPPE, setDisableOtherPPE] = useState(false);
   const toast = useToast();
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     const selectedNoisePosition = noiseOptions.find(
@@ -88,7 +90,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
   return (
     <Stack spacing={4}>
       <FormControl isInvalid={!!errors.position && touched.position}>
-        <FormLabel>ตำแหน่งงาน*</FormLabel>
+        <FormLabel>{t.position}*</FormLabel>
         <Field
           as={Select}
           name="position"
@@ -96,14 +98,14 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
           validate={(value) => {
             let error;
             if (!value) {
-              error = "กรุณาเลือกตำแหน่งงาน";
+              error = t.error.position;
             }
             return error;
           }}
         >
           {noiseOptions.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {t.positionOptions[option.value] || option.label}
             </option>
           ))}
         </Field>
@@ -111,21 +113,21 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.noise && touched.noise}>
-        <FormLabel>ระดับเสียง*</FormLabel>
+        <FormLabel>{t.soundLevel.title}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="noise"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={0}
             step={0.01}
             validate={(value) => {
               let error;
               if (!value) {
-                error = "กรุณาใส่ข้อมูลระดับความดันเสียง";
+                error = t.error.soundLevel1;
               } else if (value < 0) {
-                error = "ข้อมูลระดับความดันเสียงต้องไม่ต่ำกว่า 0 db(A)";
+                error = t.error.soundLevel2;
               }
               return error;
             }}
@@ -137,56 +139,56 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
 
       <FormControl>
         <FormLabel>
-          ค่าการสั่นสะเทือน (m/s<sup>2</sup>)
+          {t.vibrationValue} (m/s<sup>2</sup>)
         </FormLabel>
         <div className="grid grid-cols-2 gap-2 max-md:grid-cols-1">
           <InputGroup>
-            <InputLeftAddon>แกน X</InputLeftAddon>
+            <InputLeftAddon>{t.x}</InputLeftAddon>
             <Field
               as={Input}
               type="number"
               name="vibrateX"
-              placeholder="ใส่เฉพาะตัวเลข"
+              placeholder={t.placeholder.soundLevel}
               step={0.01}
             />
           </InputGroup>
           <InputGroup>
-            <InputLeftAddon>แกน Y</InputLeftAddon>
+            <InputLeftAddon>{t.y}</InputLeftAddon>
             <Field
               as={Input}
               type="number"
               name="vibrateY"
-              placeholder="ใส่เฉพาะตัวเลข"
+              placeholder={t.placeholder.soundLevel}
               step={0.01}
             />
           </InputGroup>
           <InputGroup>
-            <InputLeftAddon>แกน Z</InputLeftAddon>
+            <InputLeftAddon>{t.z}</InputLeftAddon>
             <Field
               as={Input}
               type="number"
               name="vibrateZ"
-              placeholder="ใส่เฉพาะตัวเลข"
+              placeholder={t.placeholder.soundLevel}
               step={0.01}
             />
           </InputGroup>
           <InputGroup>
-            <InputLeftAddon>ค่าเฉลี่ยความเร่ง</InputLeftAddon>
+            <InputLeftAddon>{t.accelerationAvg}</InputLeftAddon>
             <Field
               as={Input}
               type="number"
               name="vibrateAvg"
-              placeholder="ใส่เฉพาะตัวเลข"
+              placeholder={t.placeholder.soundLevel}
               step={0.01}
             ></Field>
           </InputGroup>
           <InputGroup>
-            <InputLeftAddon>ค่าเฉลี่ยรับสัมผัสใน 1 วัน</InputLeftAddon>
+            <InputLeftAddon>{t.exposeAvg}</InputLeftAddon>
             <Field
               as={Input}
               type="number"
               name="vibrateTwa"
-              placeholder="ใส่เฉพาะตัวเลข"
+              placeholder={t.placeholder.soundLevel}
               step={0.01}
             />
           </InputGroup>
@@ -194,13 +196,13 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.workingHours && touched.workingHours}>
-        <FormLabel>ชั่วโมงการทำงานต่อวัน*</FormLabel>
+        <FormLabel>{t.workHour}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="workingHours"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={1}
             max={24}
             step={1}
@@ -218,19 +220,19 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
               return error;
             }}
           />
-          <InputRightAddon>ชั่วโมง</InputRightAddon>
+          <InputRightAddon>{t.workingHours.hour}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.workingHours}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.workingWeeks && touched.workingWeeks}>
-        <FormLabel>วันทำงานต่อสัปดาห์*</FormLabel>
+        <FormLabel>{t.workPerWeek}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="workingWeeks"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={1}
             max={7}
             step={1}
@@ -248,19 +250,19 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
               return error;
             }}
           />
-          <InputRightAddon>วัน</InputRightAddon>
+          <InputRightAddon>{t.dayUnit}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.workingWeeks}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.workingYears && touched.workingYears}>
-        <FormLabel>ประสบการณ์ทำครกหิน*</FormLabel>
+        <FormLabel>{t.workExperience}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="workingYears"
-            placeholder="ใส่เฉพาะตัวเลข (ถ้าไม่ถึงปีให้ใส่ 1 ปี)"
+            placeholder={t.placeholder.workExperience}
             min={1}
             step={1}
             validate={(value) => {
@@ -275,17 +277,17 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
               return error;
             }}
           />
-          <InputRightAddon>ปี</InputRightAddon>
+          <InputRightAddon>{t.age.unit}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.workingYears}</FormErrorMessage>
       </FormControl>
 
       <FormControl>
-        <FormLabel>ที่อยู่หรือชื่อสถานที่ทำงาน*</FormLabel>
+        <FormLabel>{t.workAdress}*</FormLabel>
         <Field
           as={Textarea}
           name="workAddress"
-          placeholder="ใส่ชื่อ บ้านเลขที่ หมู่ที่ ตำบล ของสถานที่ทำงาน"
+          placeholder={t.placeholder.workAddress}
         />
       </FormControl>
 
@@ -321,13 +323,13 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
 
       <Button onClick={handleGeolocation} colorScheme="teal">
         <MdLocationOn />
-        ปักหมุดที่ทำงาน
+        {t.pinLocation}
       </Button>
 
       <FormControl
         isInvalid={!!errors.workSeparation && touched.workSeparation}
       >
-        <FormLabel>ลักษณะสถานที่ทำงาน*</FormLabel>
+        <FormLabel>{t.workplaceCharacter}*</FormLabel>
         <Field
           as={Select}
           name="workSeparation"
@@ -341,7 +343,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
         >
           {workOptions.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {t.workOptions[option.value] || option.label}
             </option>
           ))}
         </Field>
@@ -349,7 +351,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
       </FormControl>
 
       <FormControl>
-        <FormLabel>การใช้อุปกรณ์ป้องกันอันตรายส่วนบุคคล*</FormLabel>
+        <FormLabel>{t.ppeTitle}*</FormLabel>
         <Field name="ppe">
           {({ field }) => (
             <CheckboxGroup
@@ -357,36 +359,36 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
               onChange={(value) => handlePPEChange(value)}
             >
               <Stack spacing={2} align="start">
-                <Checkbox value="ไม่ได้ใช้">ไม่ได้ใช้</Checkbox>
+                <Checkbox value="ไม่ได้ใช้">{t.ppeOptions.no}</Checkbox>
                 <Checkbox value="หมวกผ้าคลุมหน้า" isDisabled={disableOtherPPE}>
-                  หมวกผ้าคลุมหน้า
+                  {t.ppeOptions.hatVeil}
                 </Checkbox>
                 <Checkbox
                   value="หน้ากากอนามัยแบบเยื่อกระดาษ 3 ชั้น"
                   isDisabled={disableOtherPPE}
                 >
-                  หน้ากากอนามัยแบบเยื่อกระดาษ 3 ชั้น
+                  {t.ppeOptions.mask}
                 </Checkbox>
                 <Checkbox
                   value="หน้ากากอนามัยที่ผลิตจากผ้าฝ้าย"
                   isDisabled={disableOtherPPE}
                 >
-                  หน้ากากอนามัยที่ผลิตจากผ้าฝ้าย
+                  {t.ppeOptions.maskCotton}
                 </Checkbox>
                 <Checkbox value="หน้ากากชนิด N95" isDisabled={disableOtherPPE}>
-                  หน้ากากชนิด N95
+                  {t.ppeOptions.maskN95}
                 </Checkbox>
                 <Checkbox value="ที่อุดหู" isDisabled={disableOtherPPE}>
-                  ที่อุดหู
+                  {t.ppeOptions.earPlug}
                 </Checkbox>
                 <Checkbox value="ที่ครอบหู" isDisabled={disableOtherPPE}>
-                  ที่ครอบหู
+                  {t.ppeOptions.earMuff}
                 </Checkbox>
                 <Checkbox value="ถุงมือนิรภัย" isDisabled={disableOtherPPE}>
-                  ถุงมือนิรภัย
+                  {t.ppeOptions.safetyGloves}
                 </Checkbox>
                 <Checkbox value="รองเท้านิรภัย" isDisabled={disableOtherPPE}>
-                  รองเท้านิรภัย
+                  {t.ppeOptions.safetyShoes}
                 </Checkbox>
               </Stack>
             </CheckboxGroup>
@@ -402,7 +404,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
           className="w-full"
         >
           <MdNavigateBefore className="text-4xl text-bases" />
-          ย้อนกลับ
+          {t.back}
         </Button>
         <Button
           type="button"
@@ -411,7 +413,7 @@ export default function WorkInfoTab({ nextTab, prevTab }) {
           className="w-full disabled:text-black"
           isDisabled={!isFormValid()}
         >
-          ถัดไป
+          {t.next}
           <MdNavigateNext className="text-4xl text-bases" />
         </Button>
       </div>

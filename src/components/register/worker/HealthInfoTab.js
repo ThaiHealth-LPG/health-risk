@@ -13,8 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
 import { medicalOptions } from "./Option";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { MdNavigateBefore } from "react-icons/md";
+import { LanguageContext } from "@/context/LanguageContext";
 
 export default function HealthInfoTab({ prevTab, isLoading }) {
   const { values, setFieldValue, errors, touched, handleBlur } =
@@ -22,6 +23,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
   const { bodyWeight, bodyHeight, bmi } = values;
   const [disableOtherDiseases, setDisableOtherDiseases] = useState(false);
   const [earSymptoms, setEarSymptoms] = useState("");
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     if (bodyWeight && bodyHeight) {
@@ -64,13 +66,13 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
   return (
     <Stack spacing={4}>
       <FormControl isInvalid={!!errors.bodyWeight && touched.bodyWeight}>
-        <FormLabel>น้ำหนักร่างกาย*</FormLabel>
+        <FormLabel>{t.weight}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="bodyWeight"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={10}
             step={1}
             validate={(value) => {
@@ -85,34 +87,34 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
               return error;
             }}
           />
-          <InputRightAddon>กิโลกรัม</InputRightAddon>
+          <InputRightAddon>{t.weightUnit}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.bodyWeight}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.bodyHeight && touched.bodyHeight}>
-        <FormLabel>ส่วนสูงร่างกาย*</FormLabel>
+        <FormLabel>{t.bodyHeight.title}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="bodyHeight"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={50}
             step={1}
             validate={(value) => {
               let error;
               if (value === 0) {
-                error = "ข้อมูลส่วนสูงร่างกายต้องไม่ต่ำกว่า 1 เซนติเมตร";
+                error = t.error.bodyHeight1;
               } else if (!value) {
-                error = "กรุณาใส่ข้อมูลส่วนสูงร่างกาย";
+                error = t.error.bodyHeight2;
               } else if (value < 1) {
-                error = "ข้อมูลส่วนสูงร่างกายต้องไม่ต่ำกว่า 1 เซนติเมตร";
+                error = t.error.bodyHeight1;
               }
               return error;
             }}
           />
-          <InputRightAddon>เซนติเมตร</InputRightAddon>
+          <InputRightAddon>{t.bodyHeight.cm}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.bodyHeight}</FormErrorMessage>
       </FormControl>
@@ -131,7 +133,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.medical && touched.medical}>
-        <FormLabel>สิทธิการรักษาพยาบาล*</FormLabel>
+        <FormLabel>{t.healthInsurance}*</FormLabel>
         <Field
           as={Select}
           name="medical"
@@ -145,7 +147,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
         >
           {medicalOptions.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {t.medicalOptions[option.value] || option.label}
             </option>
           ))}
         </Field>
@@ -153,7 +155,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
       </FormControl>
 
       <FormControl>
-        <FormLabel>โรคประจำตัว*</FormLabel>
+        <FormLabel>{t.diseases}*</FormLabel>
         <Field name="diseases">
           {({ field }) => (
             <CheckboxGroup
@@ -161,51 +163,51 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
               onChange={(value) => handleDiseasesChange(value)}
             >
               <Stack spacing={2} align="start">
-                <Checkbox value="ไม่มี">ไม่มี</Checkbox>
+                <Checkbox value="ไม่มี">{t.diseasesOptions.no}</Checkbox>
                 <Checkbox
                   value="โรคปอดฝุ่นหิน"
                   isDisabled={disableOtherDiseases}
                 >
-                  โรคประสาทหูเสื่อม/สูญเสียการได้ยิน
+                  {t.diseasesOptions.silicosis}
                 </Checkbox>
                 <Checkbox
                   value="โรคประสาทหูเสื่อม"
                   isDisabled={disableOtherDiseases}
                 >
-                  โรคปอดฝุ่นหิน (ซิลิโคสิส)
+                  {t.diseasesOptions.hearingLoss}
                 </Checkbox>
                 <Checkbox value="โรคเบาหวาน" isDisabled={disableOtherDiseases}>
-                  โรคเบาหวาน
+                  {t.diseasesOptions.diabetes}
                 </Checkbox>
                 <Checkbox
                   value="โรคหลอดเลือดสมองและหัวใจ"
                   isDisabled={disableOtherDiseases}
                 >
-                  โรคหลอดเลือดสมองและหัวใจ
+                  {t.diseasesOptions.heartDisease}
                 </Checkbox>
                 <Checkbox
                   value="โรคถุงลมโป่งพอง"
                   isDisabled={disableOtherDiseases}
                 >
-                  โรคถุงลมโป่งพอง
+                  {t.diseasesOptions.emphysema}
                 </Checkbox>
                 <Checkbox value="โรคมะเร็ง" isDisabled={disableOtherDiseases}>
-                  โรคมะเร็ง
+                  {t.diseasesOptions.cancer}
                 </Checkbox>
                 <Checkbox
                   value="โรคความดันโลหิตสูง"
                   isDisabled={disableOtherDiseases}
                 >
-                  โรคความดันโลหิตสูง
+                  {t.diseasesOptions.hypertension}
                 </Checkbox>
                 <Checkbox
                   value="โรคไขมันในเลือดสูง"
                   isDisabled={disableOtherDiseases}
                 >
-                  โรคไขมันในเลือดสูง
+                  {t.diseasesOptions.liverDisease}
                 </Checkbox>
                 <Checkbox value="อื่น ๆ" isDisabled={disableOtherDiseases}>
-                  อื่น ๆ
+                  {t.diseasesOptions.other}
                 </Checkbox>
               </Stack>
             </CheckboxGroup>
@@ -214,7 +216,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
       </FormControl>
 
       <FormControl>
-        <FormLabel>อาการผิดปกติเกี่ยวกับหู*</FormLabel>
+        <FormLabel>{t.earSymptoms.title}*</FormLabel>
         <Field
           as={Select}
           name="earSymptoms"
@@ -226,20 +228,20 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
             }
           }}
         >
-          <option value="">เลือกอาการผิดปกติเกี่ยวกับหู</option>
-          <option value="ไม่มีอาการ">ไม่มีอาการ</option>
-          <option value="มีอาการ">มีอาการ</option>
+          <option value="">{t.placeholder.earSymptoms}</option>
+          <option value="ไม่มีอาการ">{t.earSymptoms.no}</option>
+          <option value="มีอาการ">{t.earSymptoms.yes}</option>
         </Field>
       </FormControl>
 
       {earSymptoms === "มีอาการ" && (
         <FormControl>
-          <FormLabel>ระบุอาการผิดปกติเกี่ยวกับหู*</FormLabel>
+          <FormLabel>{t.abnormalEarSymptoms}*</FormLabel>
           <Field
             as={Input}
             type="text"
             name="earSymptomsDetails"
-            placeholder="ระบุอาการผิดปกติเกี่ยวกับหู"
+            placeholder={t.abnormalEarSymptoms}
           />
         </FormControl>
       )}
@@ -252,7 +254,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
           className="w-full"
         >
           <MdNavigateBefore className="text-4xl text-bases" />
-          ย้อนกลับ
+          {t.back}
         </Button>
         <Button
           type="submit"
@@ -261,7 +263,7 @@ export default function HealthInfoTab({ prevTab, isLoading }) {
           className="w-full disabled:text-black"
           isDisabled={!isFormValid()}
         >
-          บันทึกข้อมูล
+          {t.saveData}
         </Button>
       </div>
     </Stack>

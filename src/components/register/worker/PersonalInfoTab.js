@@ -14,9 +14,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Field, useFormikContext } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { nationOptions } from "./Option";
 import { MdLocationOn, MdNavigateNext } from "react-icons/md";
+import { LanguageContext } from "@/context/LanguageContext";
 
 export default function PersonalInfoTab({ nextTab }) {
   const { values, setFieldValue, errors, touched, handleBlur } =
@@ -30,6 +31,7 @@ export default function PersonalInfoTab({ nextTab }) {
   const today = new Date();
   today.setDate(today.getDate() - 1);
   const maxDate = today.toISOString().split("T")[0];
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     if (selectedDay && selectedMonth && selectedYear) {
@@ -104,25 +106,25 @@ export default function PersonalInfoTab({ nextTab }) {
   return (
     <Stack spacing={4}>
       <FormControl>
-        <FormLabel>เลขประจำตัวประชาชนหรือ Passport</FormLabel>
+        <FormLabel>{t.personalId}</FormLabel>
         <Field
           as={Input}
           name="idNumber"
-          placeholder="เลขประจำตัวประชาชนหรือเลข Passport"
+          placeholder={t.personalId}
           onBlur={handleBlur}
         />
         <FormErrorMessage>{errors.idNumber}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.gender && touched.gender} as="fieldset">
-        <FormLabel as="legend">เพศ*</FormLabel>
+        <FormLabel as="legend">{t.gender.title}*</FormLabel>
         <RadioGroup name="gender" onBlur={handleBlur}>
           <Stack direction="row" spacing={4}>
             <Field as={Radio} name="gender" value="ชาย">
-              ชาย
+              {t.gender.male}
             </Field>
             <Field as={Radio} name="gender" value="หญิง">
-              หญิง
+              {t.gender.female}
             </Field>
           </Stack>
         </RadioGroup>
@@ -130,11 +132,11 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.firstName && touched.firstName}>
-        <FormLabel>ชื่อ*</FormLabel>
+        <FormLabel>{t.fname}*</FormLabel>
         <Field
           as={Input}
           name="firstName"
-          placeholder="ใส่เฉพาะข้อความ"
+          placeholder={t.placeholder.textOnly}
           onBlur={handleBlur}
           validate={(value) => {
             let error;
@@ -148,11 +150,11 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.lastName && touched.lastName}>
-        <FormLabel>นามสกุล*</FormLabel>
+        <FormLabel>{t.lname}*</FormLabel>
         <Field
           as={Input}
           name="lastName"
-          placeholder="ใส่เฉพาะข้อความ"
+          placeholder={t.placeholder.textOnly}
           onBlur={handleBlur}
           validate={(value) => {
             let error;
@@ -166,12 +168,12 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.phoneNumber && touched.phoneNumber}>
-        <FormLabel>หมายเลขโทรศัพท์*</FormLabel>
+        <FormLabel>{t.phone}*</FormLabel>
         <Field
           as={Input}
           type="tel"
           name="phoneNumber"
-          placeholder="ใส่เฉพาะตัวเลข เช่น 0801234567"
+          placeholder={t.placeholder.phone}
           pattern="[0-9]{10}"
           onBlur={handleBlur}
           validate={(value) => {
@@ -186,10 +188,10 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.birth && touched.birth}>
-        <FormLabel>วันเดือนปีเกิด (พ.ศ.)</FormLabel>
+        <FormLabel>{t.dob.title}</FormLabel>
         <div className="flex gap-2">
           <Select
-            placeholder="วัน"
+            placeholder={t.placeholder.dob.dayUnit}
             value={selectedDay}
             onChange={(e) => setSelectedDay(e.target.value)}
             onBlur={handleBlur}
@@ -201,24 +203,24 @@ export default function PersonalInfoTab({ nextTab }) {
             ))}
           </Select>
           <Select
-            placeholder="เดือน"
+            placeholder={t.placeholder.dob.monthUnit}
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
             onBlur={handleBlur}
           >
             {[
-              "มกราคม",
-              "กุมภาพันธ์",
-              "มีนาคม",
-              "เมษายน",
-              "พฤษภาคม",
-              "มิถุนายน",
-              "กรกฎาคม",
-              "สิงหาคม",
-              "กันยายน",
-              "ตุลาคม",
-              "พฤศจิกายน",
-              "ธันวาคม",
+              t.dob.jan,
+              t.dob.feb,
+              t.dob.mar,
+              t.dob.apr,
+              t.dob.may,
+              t.dob.jun,
+              t.dob.jul,
+              t.dob.aug,
+              t.dob.sep,
+              t.dob.oct,
+              t.dob.nov,
+              t.dob.dec,
             ].map((month, index) => (
               <option key={index + 1} value={index + 1}>
                 {month}
@@ -226,7 +228,7 @@ export default function PersonalInfoTab({ nextTab }) {
             ))}
           </Select>
           <Select
-            placeholder="ปี (พ.ศ.)"
+            placeholder={t.placeholder.dob.yearUnit}
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
             onBlur={handleBlur}
@@ -260,13 +262,13 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl isInvalid={!!errors.age && touched.age}>
-        <FormLabel>อายุ*</FormLabel>
+        <FormLabel>{t.age.title}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="age"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={1}
             step={1}
             onBlur={handleBlur}
@@ -282,13 +284,13 @@ export default function PersonalInfoTab({ nextTab }) {
               return error;
             }}
           />
-          <InputRightAddon>ปี</InputRightAddon>
+          <InputRightAddon>{t.age.unit}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.age}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.nation && touched.nation}>
-        <FormLabel>สัญชาติ*</FormLabel>
+        <FormLabel>{t.nation}*</FormLabel>
         <Field
           as={Select}
           name="nation"
@@ -303,7 +305,7 @@ export default function PersonalInfoTab({ nextTab }) {
         >
           {nationOptions.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {t.nationOptions[option.value] || option.label}
             </option>
           ))}
         </Field>
@@ -311,11 +313,11 @@ export default function PersonalInfoTab({ nextTab }) {
       </FormControl>
 
       <FormControl>
-        <FormLabel>ที่อยู่ที่พักอาศัย</FormLabel>
+        <FormLabel>{t.address}</FormLabel>
         <Field
           as={Textarea}
           name="homeAddress"
-          placeholder="ใส่บ้านเลขที่ หมู่ที่ ตำบล ของที่พักอาศัย"
+          placeholder={t.placeholder.address}
           onBlur={handleBlur}
         />
       </FormControl>
@@ -352,17 +354,17 @@ export default function PersonalInfoTab({ nextTab }) {
 
       <Button onClick={handleGeolocation} colorScheme="teal">
         <MdLocationOn />
-        ปักหมุดที่พักอาศัย
+        {t.pinLocation}
       </Button>
 
       <FormControl isInvalid={!!errors.workingYears && touched.workingYears}>
-        <FormLabel>ระยะเวลาที่อาศัยอยู่ในพื้นที่*</FormLabel>
+        <FormLabel>{t.durationLiving}*</FormLabel>
         <InputGroup>
           <Field
             as={Input}
             type="number"
             name="stayYears"
-            placeholder="ใส่เฉพาะตัวเลข"
+            placeholder={t.placeholder.soundLevel}
             min={1}
             step={1}
             onBlur={handleBlur}
@@ -380,17 +382,17 @@ export default function PersonalInfoTab({ nextTab }) {
               return error;
             }}
           />
-          <InputRightAddon>ปี</InputRightAddon>
+          <InputRightAddon>{t.age.unit}</InputRightAddon>
         </InputGroup>
         <FormErrorMessage>{errors.stayYears}</FormErrorMessage>
       </FormControl>
 
       <FormControl isInvalid={!!errors.bornAddress && touched.bornAddress}>
-        <FormLabel>ที่อยู่ภูมิลำเนาเดิม (กรณีมีการย้ายถิ่นฐาน)</FormLabel>
+        <FormLabel>{t.bornAddress}</FormLabel>
         <Field
           as={Textarea}
           name="bornAddress"
-          placeholder="ใส่ที่อยู่หรือจังหวัดภูมิลำเนาเดิม"
+          placeholder={t.placeholder.bornAddress}
           onBlur={handleBlur}
         />
       </FormControl>
@@ -402,7 +404,7 @@ export default function PersonalInfoTab({ nextTab }) {
         className="w-full disabled:text-black"
         isDisabled={!isFormValid()}
       >
-        <span>ถัดไป</span>
+        <span>{t.next}</span>
         <MdNavigateNext className="text-4xl text-neutral" />
       </Button>
     </Stack>
